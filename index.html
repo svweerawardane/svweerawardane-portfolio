@@ -2,49 +2,655 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Shevon Weerawardane | Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Shevon Weerawardane | Network & Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
+        :root {
+            --dark-deep: #0a1a2f;
+            --dark-primary: #0f2a3f;
+            --accent-blue: #1e4a76;
+            --accent-cyan: #2c7da0;
+            --light-green-mint: #d0f0e8;
+            --light-green-soft: #e2f3ef;
+            --green-accent: #2e9c7c;
+            --green-bright: #3ab795;
+            --text-light: #eaf4f0;
+            --text-dark: #0f2a2a;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(46, 156, 124, 0.25);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
+            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
+            color: var(--dark-deep);
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated network node background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f2a3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3ab795;
+            border-radius: 10px;
+        }
+
+        /* ===== GLASS NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 26, 47, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 26, 47, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom-color: #3ab795;
+        }
+
+        .logo h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b8f2e0, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Fira Code', monospace;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9cd4c2;
+            letter-spacing: 1.5px;
+            margin-top: -6px;
+        }
+
+        .navbar ul {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+        .navbar ul li a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #d0f0e8;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            font-family: 'Fira Code', monospace;
+        }
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #3ab795, #2e9c7c);
+            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .navbar ul li a:hover::after,
+        .navbar ul li a.active::after {
+            width: 100%;
+        }
+        .navbar ul li a.active {
+            color: #b8f2e0;
+            font-weight: 700;
+        }
+        .navbar ul li a:hover {
+            color: #c8ffe6;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: #3ab795;
+            border-radius: 3px;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            max-width: 1300px;
+            margin: 2rem auto 4rem;
+            padding: 2rem 5%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text {
+            flex: 1.2;
+            min-width: 280px;
+        }
+        .hero-text h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #0a1a2f;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        .hero-text h1 span {
+            background: linear-gradient(135deg, #0f2a3f, #1a5d6e, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        .hero-text h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: rgba(58, 183, 149, 0.3);
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #0f2a3f;
+            margin: 1.2rem 0 1.8rem;
+            border-left: 4px solid #3ab795;
+            padding-left: 1.2rem;
+            background: rgba(208, 240, 232, 0.5);
+            border-radius: 0 16px 16px 0;
+            font-weight: 500;
+        }
+
+        /* status badges */
+        .status-badge {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 1.2rem;
+        }
+        .pill {
+            background: rgba(10, 26, 47, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #c8e6df;
+            border: 1px solid #3ab795;
+            transition: all 0.25s;
+            font-family: 'Fira Code', monospace;
+        }
+        .pill i {
+            font-style: normal;
+            margin-right: 6px;
+        }
+        .pill.intern {
+            background: linear-gradient(110deg, #0f2a3f, #1a3a4a);
+            border-left: 4px solid #3ab795;
+            color: #e0f5ef;
+        }
+        .pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(58, 183, 149, 0.3);
+            border-color: #6ed4b5;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(95deg, #0f2a3f, #1b4e5e);
+            color: white;
+            padding: 0.9rem 2.2rem;
+            border-radius: 48px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 18px -8px rgba(58, 183, 149, 0.4);
+            border: 1px solid rgba(58, 183, 149, 0.6);
+            font-family: 'Fira Code', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(58, 183, 149, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        .btn:hover::before {
+            left: 100%;
+        }
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -12px #3ab795;
+            background: linear-gradient(95deg, #1a4a5e, #0f2a3f);
+            border-color: #8eddc2;
+        }
+
+        .hero-image {
+            flex: 0.9;
+            display: flex;
+            justify-content: center;
+        }
+        .hero-img-border {
+            position: relative;
+            width: 290px;
+            height: 290px;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            background: linear-gradient(135deg, #2e9c7c, #1b5e5a);
+            padding: 5px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.2), inset 0 0 0 2px rgba(208,240,232,0.5);
+            transition: all 0.5s ease;
+            animation: morphFloat 6s ease-in-out infinite;
+        }
+        .hero-img-border img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+            filter: brightness(1.02) contrast(1.05);
+        }
+        @keyframes morphFloat {
+            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: translateY(0);}
+            50% { border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%; transform: translateY(-8px);}
+            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: translateY(0);}
+        }
+
+        /* Feature Grid - expanded for detailed internship */
+        .feature-grid {
+            max-width: 1280px;
+            margin: 2rem auto 3rem;
+            padding: 0 5%;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        .feature-card {
+            background: rgba(10, 26, 47, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 1.5rem 1.8rem;
+            flex: 1;
+            min-width: 250px;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+        }
+        .feature-card:hover {
+            background: rgba(15, 42, 63, 0.85);
+            border-color: #3ab795;
+            transform: translateY(-6px);
+            box-shadow: 0 24px 32px -12px rgba(0,0,0,0.3);
+        }
+        .feature-card h3 {
+            font-size: 1.35rem;
+            color: #b8f2e0;
+            margin-bottom: 0.6rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #d0f0e8;
+            line-height: 1.5;
+        }
+        .feature-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            display: inline-block;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        /* Detailed Internship Section - NEW */
+        .internship-detail {
+            max-width: 1280px;
+            margin: 1rem auto 2.5rem;
+            padding: 0 5%;
+            position: relative;
+            z-index: 2;
+        }
+        .detail-card {
+            background: rgba(10, 26, 47, 0.65);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 2rem 2rem;
+            border: 1px solid rgba(58, 183, 149, 0.5);
+            transition: all 0.3s;
+        }
+        .detail-card:hover {
+            border-color: #3ab795;
+            background: rgba(10, 26, 47, 0.8);
+        }
+        .detail-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #b8f2e0;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .detail-title span {
+            background: #3ab79520;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            border: 1px solid #3ab795;
+        }
+        .responsibility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.2rem;
+        }
+        .resp-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            border-left: 3px solid #3ab795;
+            transition: 0.2s;
+        }
+        .resp-item:hover {
+            transform: translateX(5px);
+            background: rgba(58, 183, 149, 0.1);
+        }
+        .resp-item strong {
+            color: #8eddc2;
+            font-family: 'Fira Code', monospace;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+        .resp-item p {
+            color: #d0f0e8;
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+        .tech-tag {
+            display: inline-block;
+            background: #2e9c7c30;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #b8f2e0;
+            margin-top: 8px;
+            font-family: monospace;
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin: 2rem auto 3rem;
+            font-size: 0.85rem;
+            color: #0a1a2f;
+            font-family: 'Fira Code', monospace;
+        }
+        .footer-note span {
+            background: #0f2a3f;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid #3ab795;
+            color: #b8f2e0;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(40px);}
+            to { opacity: 1; transform: translateX(0);}
+        }
+        .hero-text { animation: fadeUp 0.7s ease forwards; }
+        .status-badge .pill:first-child { animation: fadeUp 0.5s ease forwards; opacity: 0; animation-delay: 0.1s; animation-fill-mode: forwards; }
+        .status-badge .pill:last-child { animation: fadeUp 0.5s ease forwards; opacity: 0; animation-delay: 0.25s; animation-fill-mode: forwards; }
+        .hero-text h1 { animation: fadeUp 0.6s ease forwards; opacity: 0; animation-delay: 0.2s; animation-fill-mode: forwards; }
+        .hero-text p { animation: fadeUp 0.6s ease forwards; opacity: 0; animation-delay: 0.4s; animation-fill-mode: forwards; }
+        .hero-text .btn { animation: fadeUp 0.6s ease forwards; opacity: 0; animation-delay: 0.6s; animation-fill-mode: forwards; }
+        .hero-image { animation: slideRight 0.7s ease forwards; opacity: 0; animation-delay: 0.3s; animation-fill-mode: forwards; }
+        .feature-card, .detail-card { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.5s ease; }
+        .feature-card.revealed, .detail-card.revealed { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 850px) {
+            .hero { flex-direction: column-reverse; text-align: center; }
+            .hero-text p { border-left: none; border-top: 3px solid #3ab795; padding-left: 0; padding-top: 1rem; border-radius: 0; }
+            .status-badge { justify-content: center; }
+            .navbar ul {
+                gap: 1rem;
+                background: rgba(10, 26, 47, 0.96);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                padding: 1.5rem;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                transform: scaleY(0);
+                transform-origin: top;
+                transition: 0.3s;
+                opacity: 0;
+                pointer-events: none;
+                border-radius: 0 0 24px 24px;
+            }
+            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
+            .menu-toggle { display: flex; }
+            .hero-text h1 { font-size: 2.8rem; }
+            .detail-title { font-size: 1.4rem; flex-wrap: wrap; }
+        }
+        @media (max-width: 550px) {
+            .hero-text h1 { font-size: 2.2rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo">
             <h2>Shevon</h2>
-            <p>IT & Networking</p>
+            <p>NETWORK & SOFTWARE</p>
         </div>
-        <ul>
+        <ul id="navLinks">
             <li><a href="index.html" class="active">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="projects.html">Projects</a></li>
             <li><a href="skills.html">Skills</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
-        <div class="menu-toggle">
+        <div class="menu-toggle" id="menuToggle">
             <span></span>
             <span></span>
             <span></span>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-text">
+            <div class="status-badge">
+                <span class="pill"><i>🖧</i> BSc IT @ SLIIT City Uni</span>
+                <span class="pill intern"><i>⚡</i> IT Intern @ Expoceylon PLC</span>
+            </div>
             <h1>Hi, I'm <span>Shevon</span>!</h1>
             <p>
-                I am an IT undergraduate at SLIIT City University, specializing in 
-                <strong>Computer Networking, Hardware, Web Development, and Security</strong>. 
-                I create practical IT solutions and explore new technologies through projects.
+                Network & Software Engineering enthusiast. IT undergraduate at <strong>SLIIT City University</strong>, 
+                currently an <strong>IT Intern at Expoceylon PLC</strong>. I specialize in <strong>Computer Networking, 
+                Full-Stack Development, Network Automation, and Secure Infrastructure</strong>. 
+                I design resilient networks and build scalable software solutions that bridge hardware and code.
             </p>
-            <a href="projects.html" class="btn">View My Projects →</a>
+            <a href="projects.html" class="btn">Explore My Work →</a>
         </div>
-
         <div class="hero-image">
             <div class="hero-img-border">
-                <img src="hero.jpg" alt="Shevon Weerawardane">
+                <img src="hero.jpg" alt="Shevon Weerawardane" onerror="this.src='https://placehold.co/400x400/1a4a5e/3ab795?text=Shevon+NE'">
             </div>
         </div>
     </section>
 
+    <!-- Detailed Internship Section based on your description -->
+    <div class="internship-detail">
+        <div class="detail-card" id="internDetail">
+            <div class="detail-title">
+                🔧 Expoceylon PLC — IT Internship Experience
+                <span>hands-on role</span>
+            </div>
+            <div class="responsibility-grid">
+                <div class="resp-item">
+                    <strong>📋 ERP System Management</strong>
+                    <p>Supporting daily IT operations with enterprise ERP systems, ensuring data integrity, user access control, and smooth financial/operational workflows.</p>
+                    <span class="tech-tag">ERP • SAP Business One • Data Governance</span>
+                </div>
+                <div class="resp-item">
+                    <strong>🖥️ Hardware Maintenance & Infrastructure</strong>
+                    <p>Managing hardware lifecycle, troubleshooting workstations, servers, and networking devices. Maintaining IT infrastructure for uninterrupted business continuity.</p>
+                    <span class="tech-tag">Dell Servers • Cisco Switches • Asset Management</span>
+                </div>
+                <div class="resp-item">
+                    <strong>🔍 Troubleshooting & Security Systems</strong>
+                    <p>Hands-on experience in diagnosing network faults, resolving tickets, and implementing security protocols — firewalls, antivirus, and patch management.</p>
+                    <span class="tech-tag">Firewalls • SIEM • Active Directory • VPNs</span>
+                </div>
+                <div class="resp-item">
+                    <strong>⚙️ Professional IT Workflows</strong>
+                    <p>Contributing to efficient business operations via ITIL-based processes, documentation, and cross-department collaboration. Optimizing daily IT support.</p>
+                    <span class="tech-tag">ITIL • Jira • SLA Management • Automation</span>
+                </div>
+            </div>
+            <p style="margin-top: 1.2rem; color: #b8f2e0; font-size: 0.85rem; border-top: 1px solid #3ab79540; padding-top: 1rem; text-align: center;">
+                🚀 Gaining real-world expertise in enterprise IT, from ERP oversight to hardware resilience — bridging academic knowledge with corporate excellence.
+            </p>
+        </div>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3>Network Engineering</h3>
+            <p>Routing & Switching | SDN | Wireshark | Cisco Packet Tracer | Designing low-latency, secure enterprise networks with VLANs, OSPF, and firewall policies.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💻</div>
+            <h3>Software Craft</h3>
+            <p>Full-stack dev (React, Node.js, Python), API design, version control, and clean architecture. Building tools that solve real operational challenges.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔐</div>
+            <h3>Infra & Security</h3>
+            <p>Internship at Expoceylon PLC: ERP management, hardware troubleshooting, security systems, and professional IT workflows — ensuring reliable infrastructure.</p>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <span>🖥️ $> shevon --role "IT Intern @ Expoceylon" --focus "ERP • Hardware • Security • Infrastructure"</span>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navbar = document.getElementById('navbar');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+        const links = document.querySelectorAll('.navbar ul li a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            });
+        });
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        const cards = document.querySelectorAll('.feature-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, idx) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('revealed'), idx * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        cards.forEach(c => observer.observe(c));
+
+        const detailCard = document.querySelector('.detail-card');
+        if (detailCard) {
+            const detailObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('revealed');
+                });
+            }, { threshold: 0.2 });
+            detailObserver.observe(detailCard);
+        }
+
+        window.addEventListener('load', () => {
+            cards.forEach(c => {
+                if (c.getBoundingClientRect().top < window.innerHeight - 80) c.classList.add('revealed');
+            });
+            if (detailCard && detailCard.getBoundingClientRect().top < window.innerHeight - 80) detailCard.classList.add('revealed');
+        });
+    </script>
 </body>
 </html>
