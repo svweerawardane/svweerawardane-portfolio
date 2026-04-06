@@ -2,31 +2,510 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Vulnerability Assessment | Project Details</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Security Vulnerability Assessment | Project Details | Shevon Weerawardane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
+        :root {
+            --dark-deep: #0a1a2f;
+            --dark-primary: #0f2a3f;
+            --accent-blue: #1e4a76;
+            --accent-cyan: #2c7da0;
+            --light-green-mint: #d0f0e8;
+            --light-green-soft: #e2f3ef;
+            --green-accent: #2e9c7c;
+            --green-bright: #3ab795;
+            --text-light: #eaf4f0;
+            --text-dark: #0f2a2a;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
+            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
+            color: var(--dark-deep);
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated network node background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f2a3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3ab795;
+            border-radius: 10px;
+        }
+
+        /* ===== GLASS NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 26, 47, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 26, 47, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom-color: #3ab795;
+        }
+
+        .logo h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b8f2e0, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Fira Code', monospace;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9cd4c2;
+            letter-spacing: 1.5px;
+            margin-top: -6px;
+        }
+
+        .navbar ul {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+        .navbar ul li a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #d0f0e8;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            font-family: 'Fira Code', monospace;
+        }
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #3ab795, #2e9c7c);
+            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .navbar ul li a:hover::after,
+        .navbar ul li a.active::after {
+            width: 100%;
+        }
+        .navbar ul li a.active {
+            color: #b8f2e0;
+            font-weight: 700;
+        }
+        .navbar ul li a:hover {
+            color: #c8ffe6;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: #3ab795;
+            border-radius: 3px;
+        }
+
+        /* ===== PROJECT HERO SECTION ===== */
+        .project-hero {
+            max-width: 1280px;
+            margin: 2rem auto 2rem;
+            padding: 2rem 5%;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .project-hero-text h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .project-badge {
+            display: inline-block;
+            background: #3ab795;
+            color: #0a1a2f;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 1rem;
+        }
+
+        .project-hero-text p {
+            font-size: 1.2rem;
+            color: #0f2a3f;
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(208, 240, 232, 0.4);
+            padding: 1rem;
+            border-radius: 20px;
+            border-left: 4px solid #3ab795;
+        }
+
+        /* ===== PROJECT DETAILS SECTION ===== */
+        .project-details {
+            max-width: 1280px;
+            margin: 1rem auto 2rem;
+            padding: 0 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-content {
+            background: rgba(10, 26, 47, 0.65);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 2rem;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+        }
+
+        .project-content h2 {
+            font-size: 1.8rem;
+            color: #b8f2e0;
+            margin: 1.5rem 0 1rem;
+            font-family: 'Fira Code', monospace;
+            border-left: 4px solid #3ab795;
+            padding-left: 1rem;
+        }
+
+        .project-content h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .project-content p {
+            color: #d0f0e8;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-content ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-content ul li {
+            color: #d0f0e8;
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .project-content ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #3ab795;
+        }
+
+        /* Security Assessment Grid */
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .assessment-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 1.2rem;
+            border: 1px solid rgba(58, 183, 149, 0.3);
+            transition: all 0.3s;
+        }
+        .assessment-card:hover {
+            transform: translateY(-5px);
+            border-color: #3ab795;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .assessment-card h3 {
+            color: #b8f2e0;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-family: 'Fira Code', monospace;
+        }
+        .assessment-card p {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+
+        /* Risk Level Indicators */
+        .risk-high {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .risk-medium {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+        .risk-low {
+            color: #6bcb77;
+            font-weight: bold;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 1rem 0 1.5rem;
+        }
+        .tech-tag {
+            background: rgba(58, 183, 149, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #b8f2e0;
+            font-family: monospace;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+        }
+
+        /* Role Info Card */
+        .role-info {
+            background: rgba(58, 183, 149, 0.1);
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 3px solid #3ab795;
+        }
+        .role-info p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Evidence Section */
+        .project-evidence {
+            margin: 1.5rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .project-evidence img {
+            max-width: 100%;
+            border-radius: 20px;
+            border: 2px solid rgba(58, 183, 149, 0.5);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .project-evidence img:hover {
+            border-color: #3ab795;
+            transform: scale(1.01);
+        }
+        .evidence-caption {
+            margin-top: 0.8rem;
+            color: #9cd4c2;
+            font-size: 0.8rem;
+            font-family: monospace;
+        }
+
+        /* Back Button */
+        .back-btn-container {
+            text-align: center;
+            margin: 2rem auto 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(95deg, #0f2a3f, #1b4e5e);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 48px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px -8px rgba(58, 183, 149, 0.4);
+            border: 1px solid rgba(58, 183, 149, 0.6);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 20px -10px #3ab795;
+            background: linear-gradient(95deg, #1a4a5e, #0f2a3f);
+            border-color: #8eddc2;
+        }
+
+        /* Modal for fullscreen image */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 26, 47, 0.96);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 20px;
+            border: 3px solid #3ab795;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            font-size: 2.5rem;
+            color: #3ab795;
+            cursor: pointer;
+            font-family: monospace;
+            transition: 0.2s;
+        }
+        .modal-close:hover {
+            color: #8eddc2;
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin: 2rem auto 2rem;
+            font-size: 0.85rem;
+            color: #0a1a2f;
+            font-family: 'Fira Code', monospace;
+        }
+        .footer-note span {
+            background: #0f2a3f;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid #3ab795;
+            color: #b8f2e0;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .project-hero, .project-details, .back-btn-container {
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        .project-hero { animation-delay: 0s; animation-fill-mode: forwards; }
+        .project-details { animation-delay: 0.1s; animation-fill-mode: forwards; }
+        .back-btn-container { animation-delay: 0.2s; animation-fill-mode: forwards; }
+
+        @media (max-width: 850px) {
+            .project-hero-text h1 { font-size: 2.2rem; }
+            .project-content h2 { font-size: 1.4rem; }
+            .navbar ul {
+                gap: 1rem;
+                background: rgba(10, 26, 47, 0.96);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                padding: 1.5rem;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                transform: scaleY(0);
+                transform-origin: top;
+                transition: 0.3s;
+                opacity: 0;
+                pointer-events: none;
+                border-radius: 0 0 24px 24px;
+            }
+            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
+            .menu-toggle { display: flex; }
+            .assessment-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo">
             <h2>Shevon</h2>
-            <p>IT & Networking</p>
+            <p>NETWORK & SOFTWARE</p>
         </div>
-        <ul>
+        <ul id="navLinks">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="projects.html" class="active">Projects</a></li>
             <li><a href="skills.html">Skills</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </nav>
 
-    <!-- PROJECT HERO -->
+    <!-- PROJECT HERO SECTION -->
     <section class="project-hero">
         <div class="project-hero-text">
-            <h1>Security Vulnerability Assessment</h1>
+            <span class="project-badge">Academic Project | Computer Security Module</span>
+            <h1>🔒 Security Vulnerability Assessment</h1>
             <p>Academic security assessment project conducted on the IT infrastructure of UTE CAT Pvt Ltd to identify vulnerabilities and recommend improvements.</p>
         </div>
     </section>
@@ -35,40 +514,85 @@
     <section class="project-details">
         <div class="project-content">
 
-            <h2>Project Overview</h2>
+            <h2>📋 Project Overview</h2>
             <p>
-                This project was conducted as part of an academic requirement for the 
-             Computer Security  module.  
+                This project was conducted as part of an academic requirement for the <strong>Computer Security</strong> module at SLIIT City University.  
                 The objective was to analyze the existing IT systems of <strong>UTE CAT Pvt Ltd</strong>, 
                 identify potential security vulnerabilities, and propose mitigation strategies 
-                based on best security practices.
+                based on best security practices and industry standards.
             </p>
 
-            <h2>My Role</h2>
+            <div class="role-info">
+                <p><strong>👨‍💻 My Role:</strong> Security Analyst (Academic Project) — responsible for vulnerability identification, risk assessment, documentation, and preparation of structured security assessment reports with actionable recommendations.</p>
+            </div>
+
+            <h2>🎯 Assessment Scope</h2>
+            <div class="assessment-grid">
+                <div class="assessment-card">
+                    <h3>🌐 Network Security Review</h3>
+                    <p>Analysis of network architecture, firewall configurations, open ports, and potential entry points for unauthorized access.</p>
+                </div>
+                <div class="assessment-card">
+                    <h3>⚙️ System Configuration Weaknesses</h3>
+                    <p>Evaluation of system hardening, patch management, default credentials, and configuration vulnerabilities.</p>
+                </div>
+                <div class="assessment-card">
+                    <h3>🔐 Access Control Review</h3>
+                    <p>Assessment of user authentication mechanisms, privilege levels, password policies, and user access management.</p>
+                </div>
+                <div class="assessment-card">
+                    <h3>📊 Risk Evaluation</h3>
+                    <p>Classification of identified vulnerabilities by severity level (High/Medium/Low) with potential impact analysis.</p>
+                </div>
+            </div>
+
+            <h2>🔍 Key Findings</h2>
             <ul>
-                <li>Security Analyst (Academic Project)</li>
-                <li>Responsible for vulnerability identification and documentation</li>
-                <li>Prepared structured security assessment reports</li>
+                <li><span class="risk-high">🔴 High Risk:</span> Outdated firewall firmware with known vulnerabilities</li>
+                <li><span class="risk-high">🔴 High Risk:</span> Default administrative credentials on network devices</li>
+                <li><span class="risk-medium">🟡 Medium Risk:</span> Lack of regular security patch management</li>
+                <li><span class="risk-medium">🟡 Medium Risk:</span> Weak password policy enforcement</li>
+                <li><span class="risk-low">🟢 Low Risk:</span> Unused open ports exposing service banners</li>
+                <li><span class="risk-low">🟢 Low Risk:</span> Missing security headers on web interfaces</li>
             </ul>
 
-            <h2>Assessment Scope</h2>
+            <h2>📝 Recommendations Provided</h2>
             <ul>
-                <li>Basic network security review</li>
-                <li>System and configuration weaknesses</li>
-                <li>Access control and user management review</li>
-                <li>Risk evaluation and severity classification</li>
+                <li>Update and harden firewall configurations with regular firmware updates</li>
+                <li>Implement strong password policies and multi-factor authentication</li>
+                <li>Establish regular patch management and vulnerability scanning schedule</li>
+                <li>Disable unused ports and services to reduce attack surface</li>
+                <li>Conduct regular security awareness training for IT staff</li>
+                <li>Implement network segmentation for critical systems</li>
             </ul>
 
-            <h2>Outcomes & Learnings</h2>
+            <h2>🛠️ Tools & Methodologies Used</h2>
+            <div class="tech-stack">
+                <span class="tech-tag">Nmap</span>
+                <span class="tech-tag">Wireshark</span>
+                <span class="tech-tag">Vulnerability Assessment Framework</span>
+                <span class="tech-tag">Risk Assessment Matrix</span>
+                <span class="tech-tag">OWASP Guidelines</span>
+                <span class="tech-tag">NIST Standards</span>
+            </div>
+
+            <h2>📸 Evidence / Documentation</h2>
+            <div class="project-evidence">
+                <img src="security-assessment.png" alt="Security Assessment Report Screenshot" id="screenshotImg" onerror="this.src='https://placehold.co/800x500/0f2a3f/3ab795?text=Security+Assessment+Report+Screenshot'">
+                <div class="evidence-caption">📸 Security Assessment Report - Vulnerability Summary (Click to enlarge)</div>
+            </div>
+
+            <h2>📊 Outcomes & Learnings</h2>
             <ul>
-                <li>Identified security gaps and potential threats</li>
-                <li>Recommended practical security improvements</li>
-                <li>Improved understanding of real-world security risks</li>
-                <li>Hands-on experience in security reporting</li>
+                <li>Successfully identified critical security gaps and potential threat vectors</li>
+                <li>Recommended practical, implementable security improvements</li>
+                <li>Improved understanding of real-world security risks in corporate environments</li>
+                <li>Gained hands-on experience in security assessment methodologies and reporting</li>
+                <li>Developed skills in risk classification and mitigation strategy development</li>
             </ul>
 
-            
-
+            <h2>🎓 Key Takeaways</h2>
+            <p>This project provided invaluable experience in conducting professional security assessments, understanding enterprise security challenges, and communicating technical findings to stakeholders. It reinforced the importance of proactive security measures and regular vulnerability assessments in maintaining organizational security posture.</p>
         </div>
     </section>
 
@@ -77,5 +601,69 @@
         <a href="projects.html" class="btn">← Back to Projects</a>
     </div>
 
+    <!-- Modal for fullscreen image -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modalImage" src="" alt="Screenshot Full Size">
+    </div>
+
+    <div class="footer-note">
+        <span>🔒 Security Vulnerability Assessment | Computer Security Module @ SLIIT | UTE CAT Pvt Ltd Case Study</span>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navbar = document.getElementById('navbar');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        document.querySelectorAll('.navbar ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // Modal functionality for screenshot
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+        const screenshotImg = document.getElementById('screenshotImg');
+
+        if (screenshotImg) {
+            screenshotImg.addEventListener('click', () => {
+                modalImg.src = screenshotImg.src;
+                modal.classList.add('active');
+            });
+        }
+
+        closeBtn.onclick = () => {
+            modal.classList.remove('active');
+        };
+
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+        });
+
+        console.log('🔒 Security Vulnerability Assessment Project Page Loaded');
+        console.log('Project: Security Assessment for UTE CAT Pvt Ltd | Computer Security Module | SLIIT City University');
+        console.log('Role: Security Analyst - Vulnerability Identification & Risk Assessment');
+    </script>
 </body>
 </html>
