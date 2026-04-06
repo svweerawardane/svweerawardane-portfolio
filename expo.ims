@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Expo IMS | Inventory Management System | Shevon Weerawardane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
+        :root {
+            --dark-deep: #0a1a2f;
+            --dark-primary: #0f2a3f;
+            --accent-blue: #1e4a76;
+            --accent-cyan: #2c7da0;
+            --light-green-mint: #d0f0e8;
+            --light-green-soft: #e2f3ef;
+            --green-accent: #2e9c7c;
+            --green-bright: #3ab795;
+            --text-light: #eaf4f0;
+            --text-dark: #0f2a2a;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
+            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
+            color: var(--dark-deep);
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated network node background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f2a3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3ab795;
+            border-radius: 10px;
+        }
+
+        /* ===== GLASS NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 26, 47, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 26, 47, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom-color: #3ab795;
+        }
+
+        .logo h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b8f2e0, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Fira Code', monospace;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9cd4c2;
+            letter-spacing: 1.5px;
+            margin-top: -6px;
+        }
+
+        .navbar ul {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+        .navbar ul li a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #d0f0e8;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            font-family: 'Fira Code', monospace;
+        }
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #3ab795, #2e9c7c);
+            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .navbar ul li a:hover::after,
+        .navbar ul li a.active::after {
+            width: 100%;
+        }
+        .navbar ul li a.active {
+            color: #b8f2e0;
+            font-weight: 700;
+        }
+        .navbar ul li a:hover {
+            color: #c8ffe6;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: #3ab795;
+            border-radius: 3px;
+        }
+
+        /* ===== PROJECT DETAIL SECTION ===== */
+        .project-detail {
+            max-width: 1280px;
+            margin: 2rem auto 4rem;
+            padding: 2rem 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #3ab795;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            transform: translateX(-5px);
+            color: #8eddc2;
+        }
+
+        .project-header {
+            margin-bottom: 2rem;
+        }
+
+        .project-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .project-badge {
+            display: inline-block;
+            background: #3ab795;
+            color: #0a1a2f;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            margin-top: 0.5rem;
+        }
+
+        .project-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Project Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-card {
+            background: rgba(10, 26, 47, 0.65);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+            transition: all 0.3s;
+        }
+        .info-card:hover {
+            border-color: #3ab795;
+            transform: translateY(-3px);
+        }
+        .info-card h3 {
+            color: #b8f2e0;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-family: 'Fira Code', monospace;
+        }
+        .info-card p, .info-card ul {
+            color: #d0f0e8;
+            font-size: 0.9rem;
+        }
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info-card ul li {
+            padding: 0.2rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .info-card ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #3ab795;
+        }
+
+        /* Image Gallery */
+        .gallery-section {
+            background: rgba(10, 26, 47, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 1.5rem;
+            border: 1px solid rgba(58, 183, 149, 0.3);
+        }
+        .gallery-section h2 {
+            color: #b8f2e0;
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+        .gallery-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            border-color: #3ab795;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-caption {
+            padding: 0.6rem;
+            text-align: center;
+            color: #9cd4c2;
+            font-size: 0.75rem;
+            font-family: monospace;
+            background: rgba(10, 26, 47, 0.7);
+        }
+
+        /* Modal for fullscreen image */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 26, 47, 0.96);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 20px;
+            border: 3px solid #3ab795;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            font-size: 2.5rem;
+            color: #3ab795;
+            cursor: pointer;
+            font-family: monospace;
+            transition: 0.2s;
+        }
+        .modal-close:hover {
+            color: #8eddc2;
+            transform: scale(1.1);
+        }
+
+        /* Tech Stack Tags */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+        }
+        .tech-tag {
+            background: rgba(58, 183, 149, 0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #b8f2e0;
+            font-family: monospace;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin: 2rem auto 2rem;
+            font-size: 0.85rem;
+            color: #0a1a2f;
+            font-family: 'Fira Code', monospace;
+        }
+        .footer-note span {
+            background: #0f2a3f;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid #3ab795;
+            color: #b8f2e0;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .project-detail > * {
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        .back-link { animation-delay: 0s; animation-fill-mode: forwards; }
+        .project-header { animation-delay: 0.1s; animation-fill-mode: forwards; }
+        .info-grid { animation-delay: 0.2s; animation-fill-mode: forwards; }
+        .gallery-section { animation-delay: 0.3s; animation-fill-mode: forwards; }
+
+        @media (max-width: 850px) {
+            .project-header h1 { font-size: 2rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .navbar ul {
+                gap: 1rem;
+                background: rgba(10, 26, 47, 0.96);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                padding: 1.5rem;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                transform: scaleY(0);
+                transform-origin: top;
+                transition: 0.3s;
+                opacity: 0;
+                pointer-events: none;
+                border-radius: 0 0 24px 24px;
+            }
+            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            <h2>Shevon</h2>
+            <p>NETWORK & SOFTWARE</p>
+        </div>
+        <ul id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="projects.html" class="active">Projects</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="project-detail">
+        <a href="projects.html" class="back-link">← Back to Projects</a>
+
+        <div class="project-header">
+            <h1>📦 Expo IMS</h1>
+            <span class="project-badge">Internship Project @ Expoceylon PLC</span>
+        </div>
+
+        <div class="project-content">
+            <!-- Info Grid -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📋 Project Overview</h3>
+                    <p>Inventory Management System developed for Expoceylon PLC to track stock levels, manage purchase orders, and streamline warehouse operations. Built as part of my internship contribution to improve operational efficiency.</p>
+                </div>
+                <div class="info-card">
+                    <h3>👨‍💻 My Role</h3>
+                    <ul>
+                        <li>Developer & IT Support</li>
+                        <li>Database Design & Implementation</li>
+                        <li>Frontend & Backend Integration</li>
+                        <li>User Training & Documentation</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>⚙️ Key Features</h3>
+                    <ul>
+                        <li>Stock tracking & real-time updates</li>
+                        <li>Supplier management system</li>
+                        <li>Purchase order generation</li>
+                        <li>Reporting & analytics dashboard</li>
+                        <li>User role-based access control</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="info-card" style="margin-bottom: 0;">
+                <h3>🛠️ Technologies Used</h3>
+                <div class="tech-stack">
+                    <span class="tech-tag">PHP</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">Bootstrap 5</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">jQuery</span>
+                    <span class="tech-tag">HTML5/CSS3</span>
+                    <span class="tech-tag">AJAX</span>
+                </div>
+            </div>
+
+            <!-- Image Gallery Section -->
+            <div class="gallery-section">
+                <h2>📸 Project Screenshots</h2>
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Images will be dynamically loaded here -->
+                </div>
+                <p style="color: #9cd4c2; font-size: 0.75rem; margin-top: 1rem; text-align: center; font-family: monospace;">
+                    💡 Click on any screenshot to view full size
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for fullscreen image -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modalImage" src="" alt="Screenshot">
+    </div>
+
+    <div class="footer-note">
+        <span>📦 Expo IMS | Inventory Management System | Developed @ Expoceylon PLC Internship</span>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navbar = document.getElementById('navbar');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        document.querySelectorAll('.navbar ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // ========== IMAGE GALLERY CONFIGURATION ==========
+        // Save your images with these exact names in the same folder as this HTML file
+        const projectImages = [
+            { filename: 'expo-ims-1.jpg', caption: 'Dashboard Overview - Stock Summary' },
+            { filename: 'expo-ims-2.jpg', caption: 'Inventory Management - Product List' },
+            { filename: 'expo-ims-3.jpg', caption: 'Purchase Orders & Supplier Management' },
+            { filename: 'expo-ims-4.jpg', caption: 'Stock Reports & Analytics' },
+            { filename: 'expo-ims-5.jpg', caption: 'User Management & Settings' }
+        ];
+
+        // Populate gallery
+        const galleryGrid = document.getElementById('galleryGrid');
+        
+        function loadGallery() {
+            projectImages.forEach((img, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                
+                const imgElement = document.createElement('img');
+                imgElement.src = img.filename;
+                imgElement.alt = img.caption;
+                imgElement.onerror = function() {
+                    // Show placeholder if image not found
+                    this.src = 'https://placehold.co/600x400/0f2a3f/3ab795?text=Expo+IMS+Screenshot+' + (index+1);
+                    this.style.objectFit = 'contain';
+                    this.style.background = '#0f2a3f';
+                };
+                
+                const caption = document.createElement('div');
+                caption.className = 'gallery-caption';
+                caption.textContent = img.caption;
+                
+                galleryItem.appendChild(imgElement);
+                galleryItem.appendChild(caption);
+                
+                // Click to open modal
+                galleryItem.addEventListener('click', () => {
+                    openModal(imgElement.src);
+                });
+                
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+
+        function openModal(src) {
+            modalImg.src = src;
+            modal.classList.add('active');
+        }
+
+        closeBtn.onclick = () => {
+            modal.classList.remove('active');
+        };
+
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Load gallery on page load
+        loadGallery();
+
+        // Also handle the case where images might be loading slowly
+        console.log('Expo IMS Project Page Loaded');
+        console.log('📸 Image naming instructions:');
+        console.log('   Save your screenshots as:');
+        console.log('   - expo-ims-1.jpg (Dashboard Overview)');
+        console.log('   - expo-ims-2.jpg (Product List)');
+        console.log('   - expo-ims-3.jpg (Purchase Orders)');
+        console.log('   - expo-ims-4.jpg (Stock Reports)');
+        console.log('   - expo-ims-5.jpg (User Management)');
+        console.log('   Place them in the same folder as this HTML file.');
+    </script>
+</body>
+</html>
