@@ -2,64 +2,419 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Contact | Shevon Weerawardane</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Contact | Shevon Weerawardane | Network & Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
+        :root {
+            --dark-deep: #0a1a2f;
+            --dark-primary: #0f2a3f;
+            --accent-blue: #1e4a76;
+            --accent-cyan: #2c7da0;
+            --light-green-mint: #d0f0e8;
+            --light-green-soft: #e2f3ef;
+            --green-accent: #2e9c7c;
+            --green-bright: #3ab795;
+            --text-light: #eaf4f0;
+            --text-dark: #0f2a2a;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
+            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
+            color: var(--dark-deep);
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated network node background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f2a3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3ab795;
+            border-radius: 10px;
+        }
+
+        /* ===== GLASS NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 26, 47, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 26, 47, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom-color: #3ab795;
+        }
+
+        .logo h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b8f2e0, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Fira Code', monospace;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9cd4c2;
+            letter-spacing: 1.5px;
+            margin-top: -6px;
+        }
+
+        .navbar ul {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+        .navbar ul li a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #d0f0e8;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            font-family: 'Fira Code', monospace;
+        }
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #3ab795, #2e9c7c);
+            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .navbar ul li a:hover::after,
+        .navbar ul li a.active::after {
+            width: 100%;
+        }
+        .navbar ul li a.active {
+            color: #b8f2e0;
+            font-weight: 700;
+        }
+        .navbar ul li a:hover {
+            color: #c8ffe6;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: #3ab795;
+            border-radius: 3px;
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact {
+            max-width: 1280px;
+            margin: 2rem auto 4rem;
+            padding: 2rem 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #0f2a3f;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #3ab795;
+            padding-left: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(10, 26, 47, 0.65);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 2rem 1.8rem;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            text-align: center;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-8px);
+            border-color: #3ab795;
+            background: rgba(10, 26, 47, 0.8);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .contact-card h3 {
+            font-size: 1.5rem;
+            color: #b8f2e0;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .contact-card p {
+            margin: 0.5rem 0;
+        }
+
+        .contact-card a {
+            color: #d0f0e8;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            word-break: break-all;
+            display: inline-block;
+            padding: 0.2rem 0;
+        }
+
+        .contact-card a:hover {
+            color: #3ab795;
+            transform: translateX(3px);
+        }
+
+        /* Availability Note */
+        .availability-note {
+            margin-top: 3rem;
+            background: rgba(10, 26, 47, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(58, 183, 149, 0.3);
+        }
+        .availability-note p {
+            color: #d0f0e8;
+            font-size: 0.9rem;
+            font-family: monospace;
+        }
+        .availability-note .status-badge {
+            display: inline-block;
+            background: #3ab795;
+            color: #0a1a2f;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin: 2rem auto 2rem;
+            font-size: 0.85rem;
+            color: #0a1a2f;
+            font-family: 'Fira Code', monospace;
+        }
+        .footer-note span {
+            background: #0f2a3f;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid #3ab795;
+            color: #b8f2e0;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .contact h1, .subtitle, .contact-card, .availability-note {
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        .contact h1 { animation-delay: 0s; animation-fill-mode: forwards; }
+        .subtitle { animation-delay: 0.1s; animation-fill-mode: forwards; }
+        .contact-card:nth-child(1) { animation-delay: 0.2s; animation-fill-mode: forwards; }
+        .contact-card:nth-child(2) { animation-delay: 0.3s; animation-fill-mode: forwards; }
+        .contact-card:nth-child(3) { animation-delay: 0.4s; animation-fill-mode: forwards; }
+        .contact-card:nth-child(4) { animation-delay: 0.5s; animation-fill-mode: forwards; }
+        .availability-note { animation-delay: 0.6s; animation-fill-mode: forwards; }
+
+        @media (max-width: 850px) {
+            .contact h1 { font-size: 2.5rem; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .navbar ul {
+                gap: 1rem;
+                background: rgba(10, 26, 47, 0.96);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                padding: 1.5rem;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                transform: scaleY(0);
+                transform-origin: top;
+                transition: 0.3s;
+                opacity: 0;
+                pointer-events: none;
+                border-radius: 0 0 24px 24px;
+            }
+            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo">
             <h2>Shevon</h2>
-            <p>IT & Networking</p>
+            <p>NETWORK & SOFTWARE</p>
         </div>
-        <ul>
+        <ul id="navLinks">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="projects.html">Projects</a></li>
             <li><a href="skills.html">Skills</a></li>
             <li><a href="contact.html" class="active">Contact</a></li>
         </ul>
-        <div class="menu-toggle">
+        <div class="menu-toggle" id="menuToggle">
             <span></span>
             <span></span>
             <span></span>
         </div>
     </nav>
 
-    <!-- CONTACT SECTION -->
     <section class="contact">
         <h1>Contact Me</h1>
-        <p class="subtitle">Get in touch via Email, Phone, or Social Media</p>
+        <p class="subtitle">Get in touch via Email, Phone, or Social Media — Let's connect!</p>
 
         <div class="contact-grid">
-
             <!-- EMAIL -->
             <div class="contact-card">
+                <div class="contact-icon">📧</div>
                 <h3>Email</h3>
                 <p><a href="mailto:shevon.weerawardane@gmail.com">shevon.weerawardane@gmail.com</a></p>
             </div>
 
             <!-- PHONE -->
             <div class="contact-card">
+                <div class="contact-icon">📞</div>
                 <h3>Phone</h3>
                 <p><a href="tel:+94773857922">+94 77 385 7922</a></p>
             </div>
 
             <!-- LINKEDIN -->
             <div class="contact-card">
+                <div class="contact-icon">🔗</div>
                 <h3>LinkedIn</h3>
                 <p><a href="https://www.linkedin.com/in/shevon-weerawardane-7a8a74328/" target="_blank">linkedin.com/in/shevon-weerawardane</a></p>
             </div>
 
             <!-- GITHUB -->
             <div class="contact-card">
+                <div class="contact-icon">🐙</div>
                 <h3>GitHub</h3>
-                <p><a href="https://github.com/svweerawardane" target="_blank">https://github.com/svweerawardane</a></p>
+                <p><a href="https://github.com/svweerawardane" target="_blank">github.com/svweerawardane</a></p>
             </div>
+        </div>
 
+        <!-- Availability Note -->
+        <div class="availability-note">
+            <p>🚀 Currently open for networking opportunities, collaborations, and IT internships/roles.</p>
+            <p>📍 Based in Sri Lanka | Available for remote or on-site positions</p>
+            <span class="status-badge">Available for opportunities</span>
         </div>
     </section>
 
+    <div class="footer-note">
+        <span>📬 shevon.weerawardane@gmail.com | 📞 +94 77 385 7922 | 🌐 Let's connect!</span>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navbar = document.getElementById('navbar');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        document.querySelectorAll('.navbar ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        console.log('📬 Contact Page Loaded - Shevon Weerawardane');
+        console.log('Email: shevon.weerawardane@gmail.com');
+        console.log('Phone: +94 77 385 7922');
+    </script>
 </body>
 </html>
