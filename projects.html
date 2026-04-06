@@ -2,131 +2,656 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Projects | Shevon Weerawardane</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Projects | Shevon Weerawardane | Network & Software Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
+        :root {
+            --dark-deep: #0a1a2f;
+            --dark-primary: #0f2a3f;
+            --accent-blue: #1e4a76;
+            --accent-cyan: #2c7da0;
+            --light-green-mint: #d0f0e8;
+            --light-green-soft: #e2f3ef;
+            --green-accent: #2e9c7c;
+            --green-bright: #3ab795;
+            --text-light: #eaf4f0;
+            --text-dark: #0f2a2a;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
+            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
+            color: var(--dark-deep);
+            line-height: 1.5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated network node background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f2a3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3ab795;
+            border-radius: 10px;
+        }
+
+        /* ===== GLASS NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 26, 47, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 26, 47, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom-color: #3ab795;
+        }
+
+        .logo h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b8f2e0, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Fira Code', monospace;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9cd4c2;
+            letter-spacing: 1.5px;
+            margin-top: -6px;
+        }
+
+        .navbar ul {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+        .navbar ul li a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #d0f0e8;
+            transition: 0.25s ease;
+            position: relative;
+            padding: 0.5rem 0;
+            font-family: 'Fira Code', monospace;
+        }
+        .navbar ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #3ab795, #2e9c7c);
+            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .navbar ul li a:hover::after,
+        .navbar ul li a.active::after {
+            width: 100%;
+        }
+        .navbar ul li a.active {
+            color: #b8f2e0;
+            font-weight: 700;
+        }
+        .navbar ul li a:hover {
+            color: #c8ffe6;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: #3ab795;
+            border-radius: 3px;
+        }
+
+        /* ===== PROJECTS SECTION ===== */
+        .projects {
+            max-width: 1400px;
+            margin: 2rem auto 4rem;
+            padding: 2rem 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .projects h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #0f2a3f;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid #3ab795;
+            padding-left: 1rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: rgba(10, 26, 47, 0.65);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 1.5rem;
+            border: 1px solid rgba(58, 183, 149, 0.4);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: #3ab795;
+            background: rgba(10, 26, 47, 0.8);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            color: #b8f2e0;
+            margin-bottom: 0.5rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: monospace;
+        }
+
+        .tag.completed {
+            background: #2e9c7c;
+            color: #0a1a2f;
+        }
+
+        .tag.pending {
+            background: #c98a2e;
+            color: #0a1a2f;
+        }
+
+        .tag.internship {
+            background: #3ab795;
+            color: #0a1a2f;
+        }
+
+        .project-card p {
+            color: #d0f0e8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .project-card ul {
+            list-style: none;
+            margin-bottom: 1.2rem;
+        }
+
+        .project-card ul li {
+            color: #9cd4c2;
+            font-size: 0.85rem;
+            padding: 0.2rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .project-card ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #3ab795;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(95deg, #0f2a3f, #1b4e5e);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(58, 183, 149, 0.6);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -8px #3ab795;
+            background: linear-gradient(95deg, #1a4a5e, #0f2a3f);
+            border-color: #8eddc2;
+        }
+
+        /* Image Gallery Modal for Project Details */
+        .image-gallery {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+        .gallery-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid rgba(58, 183, 149, 0.5);
+            transition: all 0.2s;
+        }
+        .gallery-thumb:hover {
+            transform: scale(1.05);
+            border-color: #3ab795;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 26, 47, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 20px;
+            border: 3px solid #3ab795;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: #3ab795;
+            cursor: pointer;
+            font-family: monospace;
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin: 2rem auto 3rem;
+            font-size: 0.85rem;
+            color: #0a1a2f;
+            font-family: 'Fira Code', monospace;
+        }
+        .footer-note span {
+            background: #0f2a3f;
+            padding: 0.4rem 1.5rem;
+            border-radius: 40px;
+            display: inline-block;
+            border: 1px solid #3ab795;
+            color: #b8f2e0;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .projects h1, .subtitle, .project-card {
+            animation: fadeUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        .projects h1 { animation-delay: 0s; animation-fill-mode: forwards; }
+        .subtitle { animation-delay: 0.1s; animation-fill-mode: forwards; }
+        .project-card:nth-child(1) { animation-delay: 0.2s; animation-fill-mode: forwards; }
+        .project-card:nth-child(2) { animation-delay: 0.3s; animation-fill-mode: forwards; }
+        .project-card:nth-child(3) { animation-delay: 0.4s; animation-fill-mode: forwards; }
+        .project-card:nth-child(4) { animation-delay: 0.5s; animation-fill-mode: forwards; }
+        .project-card:nth-child(5) { animation-delay: 0.6s; animation-fill-mode: forwards; }
+        .project-card:nth-child(6) { animation-delay: 0.7s; animation-fill-mode: forwards; }
+        .project-card:nth-child(7) { animation-delay: 0.8s; animation-fill-mode: forwards; }
+        .project-card:nth-child(8) { animation-delay: 0.9s; animation-fill-mode: forwards; }
+        .project-card:nth-child(9) { animation-delay: 1s; animation-fill-mode: forwards; }
+
+        @media (max-width: 850px) {
+            .projects h1 { font-size: 2.5rem; }
+            .project-grid { grid-template-columns: 1fr; }
+            .navbar ul {
+                gap: 1rem;
+                background: rgba(10, 26, 47, 0.96);
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                padding: 1.5rem;
+                text-align: center;
+                backdrop-filter: blur(20px);
+                transform: scaleY(0);
+                transform-origin: top;
+                transition: 0.3s;
+                opacity: 0;
+                pointer-events: none;
+                border-radius: 0 0 24px 24px;
+            }
+            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
+            .menu-toggle { display: flex; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo">
             <h2>Shevon</h2>
-            <p>IT & Networking</p>
+            <p>NETWORK & SOFTWARE</p>
         </div>
-        <ul>
+        <ul id="navLinks">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="projects.html" class="active">Projects</a></li>
             <li><a href="skills.html">Skills</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
-        <div class="menu-toggle">
+        <div class="menu-toggle" id="menuToggle">
             <span></span>
             <span></span>
             <span></span>
         </div>
     </nav>
 
-    <!-- PROJECTS SECTION -->
     <section class="projects">
         <h1>My Projects</h1>
-        <p class="subtitle">Web • Applications • Networking • Security</p>
+        <p class="subtitle">Web • Applications • Networking • Security • Internship Work @ Expoceylon PLC</p>
 
         <div class="project-grid">
 
-            <!-- PROJECT 1 -->
+            <!-- PROJECT 1: Expo IMS (Inventory Management System) -->
             <div class="project-card">
-                <h3>Petnest Website</h3>
-                <span class="tag completed">Completed Assignment</span>
+                <h3>📦 Expo IMS</h3>
+                <span class="tag internship">Internship Project @ Expoceylon</span>
                 <p>
-                    A pet services platform developed with full frontend and backend functionality,
-                    allowing service listings and basic management features.
+                    Inventory Management System developed for Expoceylon PLC to track stock levels, manage purchase orders, 
+                    and streamline warehouse operations. Built as part of my internship contribution.
                 </p>
                 <ul>
-                    <li>Role: Web Developer</li>
-                    <li>Technologies: HTML, CSS, JavaScript, PHP, MySQL</li>
+                    <li>Role: Developer & IT Support</li>
+                    <li>Technologies: PHP, MySQL, Bootstrap, JavaScript</li>
+                    <li>Features: Stock tracking, supplier management, reporting</li>
                 </ul>
-
-                <a href="petnest.html" class="btn">View Details</a>
+                <div class="image-gallery" data-project="expo-ims">
+                    <!-- Thumbnails will be populated dynamically -->
+                </div>
+                <a href="#" class="btn view-gallery" data-project="expo-ims">View Screenshots →</a>
             </div>
 
-            <!-- PROJECT 2 -->
+            <!-- PROJECT 2: Expo IMD (Information Management Dashboard) -->
             <div class="project-card">
-                <h3>ETF Web Application</h3>
-                <span class="tag completed">Completed Assignment</span>
+                <h3>🔐 Expo IMD</h3>
+                <span class="tag internship">Internship Project @ Expoceylon</span>
                 <p>
-                    A record management web application developed to manage ETF-related data
-                    efficiently with database integration.
+                    Information Management Dashboard for storing and managing email addresses, phone numbers, CCTV access credentials, 
+                    and other account login details securely for company IT use.
                 </p>
                 <ul>
-                    <li>Role: Backend Developer</li>
-                    <li>Technologies: HTML, CSS, PHP, MySQL</li>
+                    <li>Role: Developer & Security Coordinator</li>
+                    <li>Technologies: PHP, MySQL, AES Encryption, Bootstrap</li>
+                    <li>Features: Secure credential storage, access logs, user roles</li>
                 </ul>
-                <a href="etf.html" class="btn">View Details</a>
+                <div class="image-gallery" data-project="expo-imd"></div>
+                <a href="#" class="btn view-gallery" data-project="expo-imd">View Screenshots →</a>
             </div>
 
-            <!-- PROJECT 3 -->
+            <!-- PROJECT 3: AttSys (Attendance System with QR) -->
             <div class="project-card">
-                <h3>ACR Prime Mart Pvt Ltd</h3>
-                <span class="tag pending">Not Hosted Yet</span>
+                <h3>📱 AttSys - QR Attendance System</h3>
+                <span class="tag internship">Internship Project @ Expoceylon</span>
                 <p>
-                    A fully developed business website for a retail mart, including frontend
-                    and backend systems. Hosting is pending.
+                    Attendance tracking system using QR codes for branch employees. Employees scan unique QR codes to mark attendance, 
+                    with real-time logging and reporting for HR management.
                 </p>
                 <ul>
                     <li>Role: Full Stack Developer</li>
-                    <li>Technologies: HTML, CSS, JavaScript, PHP, MySQL</li>
+                    <li>Technologies: PHP, MySQL, JavaScript (QR Scanner API), Bootstrap</li>
+                    <li>Features: QR generation, real-time validation, export reports</li>
                 </ul>
+                <div class="image-gallery" data-project="attsys"></div>
+                <a href="#" class="btn view-gallery" data-project="attsys">View Screenshots →</a>
+            </div>
+
+            <!-- PROJECT 4: Petnest Website -->
+            <div class="project-card">
+                <h3>🐾 Petnest Website</h3>
+                <span class="tag completed">Completed Assignment</span>
+                <p>A pet services platform developed with full frontend and backend functionality, allowing service listings and basic management features.</p>
+                <ul><li>Technologies: HTML, CSS, JavaScript, PHP, MySQL</li></ul>
+                <a href="petnest.html" class="btn">View Details</a>
+            </div>
+
+            <!-- PROJECT 5: ETF Web Application -->
+            <div class="project-card">
+                <h3>📊 ETF Web Application</h3>
+                <span class="tag completed">Completed Assignment</span>
+                <p>A record management web application developed to manage ETF-related data efficiently with database integration.</p>
+                <ul><li>Technologies: HTML, CSS, PHP, MySQL</li></ul>
+                <a href="etf.html" class="btn">View Details</a>
+            </div>
+
+            <!-- PROJECT 6: ACR Prime Mart Pvt Ltd -->
+            <div class="project-card">
+                <h3>🛒 ACR Prime Mart Pvt Ltd</h3>
+                <span class="tag pending">Not Hosted Yet</span>
+                <p>A fully developed business website for a retail mart, including frontend and backend systems.</p>
+                <ul><li>Technologies: HTML, CSS, JavaScript, PHP, MySQL</li></ul>
                 <a href="acrmart.html" class="btn">View Details</a>
             </div>
 
-            <!-- PROJECT 4 -->
+            <!-- PROJECT 7: Hospital Management System -->
             <div class="project-card">
-                <h3>Hospital Management System</h3>
+                <h3>🏥 Hospital Management System</h3>
                 <span class="tag completed">Completed Assignment</span>
-                <p>
-                    A hospital management system designed to manage patient records and
-                    support basic hospital operations.
-                </p>
-                <ul>
-                    <li>Role: System & Backend Developer</li>
-                    <li>Technologies: PHP, MySQL, Java</li>
-                </ul>
+                <p>A hospital management system designed to manage patient records and support basic hospital operations.</p>
+                <ul><li>Technologies: PHP, MySQL, Java</li></ul>
                 <a href="hospital.html" class="btn">View Details</a>
             </div>
 
-            <!-- PROJECT 5 -->
+            <!-- PROJECT 8: DispenseApp & QuizApp -->
             <div class="project-card">
-                <h3>DispenseApp & QuizApp</h3>
+                <h3>🎮 DispenseApp & QuizApp</h3>
                 <span class="tag completed">Completed Assignment</span>
-                <p>
-                    Java-based desktop applications developed to demonstrate GUI design
-                    and Data Structures & Algorithms concepts.
-                </p>
-                <ul>
-                    <li>Role: Java Developer</li>
-                    <li>Technologies: Java, Swing, DSA</li>
-                </ul>
+                <p>Java-based desktop applications demonstrating GUI design and Data Structures & Algorithms concepts.</p>
+                <ul><li>Technologies: Java, Swing, DSA</li></ul>
                 <a href="dispense-quiz.html" class="btn">View Details</a>
             </div>
 
-            <!-- PROJECT 6 -->
+            <!-- PROJECT 9: Security Vulnerability Assessment -->
             <div class="project-card">
-                <h3>Security Vulnerability Assessment – UTE CAT Pvt Ltd</h3>
+                <h3>🔒 Security Assessment – UTE CAT Pvt Ltd</h3>
                 <span class="tag completed">Completed</span>
-                <p>
-                    Conducted a security vulnerability assessment to identify system weaknesses
-                    and recommend security improvements.
-                </p>
-                <ul>
-                    <li>Role: Security Analyst (Academic Project)</li>
-                    <li>Focus: Vulnerability analysis & reporting</li>
-                </ul>
+                <p>Conducted a security vulnerability assessment to identify system weaknesses and recommend security improvements.</p>
+                <ul><li>Role: Security Analyst (Academic Project)</li></ul>
                 <a href="security-assessment.html" class="btn">View Details</a>
             </div>
 
         </div>
     </section>
 
+    <!-- Modal for Image Gallery -->
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modalImage" src="" alt="Project Screenshot">
+    </div>
+
+    <div class="footer-note">
+        <span>🖥️ Expo IMS • Expo IMD • AttSys — Developed during IT Internship @ Expoceylon PLC</span>
+    </div>
+
+    <script>
+        // Mobile menu
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navbar = document.getElementById('navbar');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+        document.querySelectorAll('.navbar ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            });
+        });
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // ========== IMAGE GALLERY CONFIGURATION ==========
+        // Define images for each project - Save your images with these exact names in the same folder
+        
+        const projectImages = {
+            'expo-ims': {
+                name: 'Expo IMS - Inventory Management System',
+                images: [
+                    'expo-ims-1.jpg', 'expo-ims-2.jpg', 'expo-ims-3.jpg', 'expo-ims-4.jpg', 'expo-ims-5.jpg'
+                ]
+            },
+            'expo-imd': {
+                name: 'Expo IMD - Information Management Dashboard',
+                images: [
+                    'expo-imd-1.jpg', 'expo-imd-2.jpg', 'expo-imd-3.jpg', 'expo-imd-4.jpg', 'expo-imd-5.jpg'
+                ]
+            },
+            'attsys': {
+                name: 'AttSys - QR Attendance System',
+                images: [
+                    'attsys-1.jpg', 'attsys-2.jpg', 'attsys-3.jpg', 'attsys-4.jpg', 'attsys-5.jpg'
+                ]
+            }
+        };
+
+        // Populate galleries and attach click handlers
+        document.querySelectorAll('.view-gallery').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const projectId = btn.getAttribute('data-project');
+                const images = projectImages[projectId]?.images || [];
+                if (images.length > 0) {
+                    // Open first image in modal
+                    openModal(images[0]);
+                } else {
+                    alert('Please add screenshots to the images folder. Save images with names like: ' + 
+                          (projectImages[projectId]?.images.join(', ') || ''));
+                }
+            });
+        });
+
+        // Also create clickable thumbnails dynamically
+        for (const [projectId, data] of Object.entries(projectImages)) {
+            const galleryDiv = document.querySelector(`.image-gallery[data-project="${projectId}"]`);
+            if (galleryDiv) {
+                data.images.forEach(img => {
+                    const thumb = document.createElement('img');
+                    thumb.src = img;
+                    thumb.alt = data.name;
+                    thumb.className = 'gallery-thumb';
+                    thumb.onerror = () => { thumb.style.display = 'none'; };
+                    thumb.onclick = () => openModal(img);
+                    galleryDiv.appendChild(thumb);
+                });
+            }
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+
+        function openModal(src) {
+            modalImg.src = src;
+            modal.classList.add('active');
+        }
+
+        closeBtn.onclick = () => {
+            modal.classList.remove('active');
+        };
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        };
+
+        // Keyboard escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
