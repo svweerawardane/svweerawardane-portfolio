@@ -309,7 +309,7 @@
             100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: translateY(0);}
         }
 
-        /* Feature Grid - expanded for detailed internship */
+        /* Feature Grid */
         .feature-grid {
             max-width: 1280px;
             margin: 2rem auto 3rem;
@@ -357,7 +357,7 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
-        /* Detailed Internship Section - NEW */
+        /* Detailed Internship Section */
         .internship-detail {
             max-width: 1280px;
             margin: 1rem auto 2.5rem;
@@ -386,6 +386,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
         }
         .detail-title span {
             background: #3ab79520;
@@ -496,7 +497,7 @@
             .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
             .menu-toggle { display: flex; }
             .hero-text h1 { font-size: 2.8rem; }
-            .detail-title { font-size: 1.4rem; flex-wrap: wrap; }
+            .detail-title { font-size: 1.4rem; }
         }
         @media (max-width: 550px) {
             .hero-text h1 { font-size: 2.2rem; }
@@ -505,10 +506,11 @@
 </head>
 <body>
 
+    <!-- NAVBAR - same structure, same image references -->
     <nav class="navbar" id="navbar">
         <div class="logo">
             <h2>Shevon</h2>
-            <p>NETWORK & SOFTWARE</p>
+            <p>IT & Networking</p>
         </div>
         <ul id="navLinks">
             <li><a href="index.html" class="active">Home</a></li>
@@ -524,29 +526,34 @@
         </div>
     </nav>
 
+    <!-- HERO SECTION - using original hero.jpg image -->
     <section class="hero">
         <div class="hero-text">
+            <!-- Added status badges showing undergraduate and internship -->
             <div class="status-badge">
-                <span class="pill"><i></i> BSc IT @ SLIIT City Uni</span>
-                <span class="pill intern"><i></i> IT Intern @ Expoceylon PLC</span>
+                <span class="pill"><i>🎓</i> IT Undergraduate @ SLIIT City Uni</span>
+                <span class="pill intern"><i>⚡</i> IT Intern @ Expoceylon PLC</span>
             </div>
             <h1>Hi, I'm <span>Shevon</span>!</h1>
             <p>
-                Network & Software Engineering enthusiast. IT undergraduate at <strong>SLIIT City University</strong>, 
-                currently an <strong>IT Intern at Expoceylon PLC</strong>. I specialize in <strong>Computer Networking, 
-                Full-Stack Development, Network Automation, and Secure Infrastructure</strong>. 
-                I design resilient networks and build scalable software solutions that bridge hardware and code.
+                I am currently an <strong>IT undergraduate at SLIIT City University</strong>, specializing in 
+                <strong>Computer Networking, Hardware, Web Development, and Security</strong>. 
+                Alongside my studies, I'm gaining real-world experience as an <strong>IT Intern at Expoceylon PLC</strong>, 
+                supporting daily IT operations, ERP systems, hardware maintenance, and security infrastructure.
+                I create practical IT solutions and explore new technologies through hands-on projects.
             </p>
-            <a href="projects.html" class="btn">Explore My Work →</a>
+            <a href="projects.html" class="btn">View My Projects →</a>
         </div>
+
         <div class="hero-image">
             <div class="hero-img-border">
-                <img src="hero.jpg" alt="Shevon Weerawardane" onerror="this.src='https://placehold.co/400x400/1a4a5e/3ab795?text=Shevon+NE'">
+                <!-- Original hero.jpg image - preserved exactly as in your code -->
+                <img src="hero.jpg" alt="Shevon Weerawardane">
             </div>
         </div>
     </section>
 
-    <!-- Detailed Internship Section based on your description -->
+    <!-- Detailed Internship Section - showing your exact responsibilities at Expoceylon PLC -->
     <div class="internship-detail">
         <div class="detail-card" id="internDetail">
             <div class="detail-title">
@@ -556,54 +563,56 @@
             <div class="responsibility-grid">
                 <div class="resp-item">
                     <strong>📋 ERP System Management</strong>
-                    <p>Supporting daily IT operations with enterprise ERP systems, ensuring data integrity, user access control, and smooth financial/operational workflows.</p>
-                    <span class="tech-tag">ERP • SAP Business One • Data Governance</span>
+                    <p>Supporting daily IT operations with enterprise ERP system management, ensuring data integrity, user access control, and smooth business workflows.</p>
+                    <span class="tech-tag">ERP • Data Governance • User Access</span>
                 </div>
                 <div class="resp-item">
-                    <strong>🖥️ Hardware Maintenance & Infrastructure</strong>
-                    <p>Managing hardware lifecycle, troubleshooting workstations, servers, and networking devices. Maintaining IT infrastructure for uninterrupted business continuity.</p>
-                    <span class="tech-tag">Dell Servers • Cisco Switches • Asset Management</span>
+                    <strong>🖥️ Hardware Maintenance</strong>
+                    <p>Managing hardware lifecycle, troubleshooting workstations, servers, and IT infrastructure. Ensuring reliable business continuity.</p>
+                    <span class="tech-tag">Hardware • Servers • Asset Management</span>
                 </div>
                 <div class="resp-item">
                     <strong>🔍 Troubleshooting & Security Systems</strong>
                     <p>Hands-on experience in diagnosing network faults, resolving tickets, and implementing security protocols — firewalls, antivirus, and patch management.</p>
-                    <span class="tech-tag">Firewalls • SIEM • Active Directory • VPNs</span>
+                    <span class="tech-tag">Security Systems • Firewalls • Active Directory</span>
                 </div>
                 <div class="resp-item">
                     <strong>⚙️ Professional IT Workflows</strong>
-                    <p>Contributing to efficient business operations via ITIL-based processes, documentation, and cross-department collaboration. Optimizing daily IT support.</p>
-                    <span class="tech-tag">ITIL • Jira • SLA Management • Automation</span>
+                    <p>Contributing to efficient business operations via professional IT workflows, documentation, and cross-department collaboration.</p>
+                    <span class="tech-tag">ITIL • SLA Management • Automation</span>
                 </div>
             </div>
             <p style="margin-top: 1.2rem; color: #b8f2e0; font-size: 0.85rem; border-top: 1px solid #3ab79540; padding-top: 1rem; text-align: center;">
-                🚀 Gaining real-world expertise in enterprise IT, from ERP oversight to hardware resilience — bridging academic knowledge with corporate excellence.
+                🚀 Gaining hands-on experience in troubleshooting, security systems, and professional IT workflows while contributing to efficient business operations.
             </p>
         </div>
     </div>
 
+    <!-- Feature Grid - additional context about skills -->
     <div class="feature-grid">
         <div class="feature-card">
             <div class="feature-icon">🌐</div>
             <h3>Network Engineering</h3>
-            <p>Routing & Switching | SDN | Wireshark | Cisco Packet Tracer | Designing low-latency, secure enterprise networks with VLANs, OSPF, and firewall policies.</p>
+            <p>Routing & Switching | Network Security | Cisco | Designing low-latency, secure enterprise networks with VLANs, OSPF, and firewall policies.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">💻</div>
-            <h3>Software Craft</h3>
-            <p>Full-stack dev (React, Node.js, Python), API design, version control, and clean architecture. Building tools that solve real operational challenges.</p>
+            <h3>Software Development</h3>
+            <p>Full-stack development, API design, version control, and clean architecture. Building tools that solve real operational challenges.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">🔐</div>
-            <h3>Infra & Security</h3>
-            <p>Internship at Expoceylon PLC: ERP management, hardware troubleshooting, security systems, and professional IT workflows — ensuring reliable infrastructure.</p>
+            <h3>IT Infrastructure</h3>
+            <p>ERP management, hardware maintenance, security systems, and professional IT workflows — ensuring reliable infrastructure at Expoceylon PLC.</p>
         </div>
     </div>
 
     <div class="footer-note">
-        <span>🖥️ $> shevon --role "IT Intern @ Expoceylon" --focus "ERP • Hardware • Security • Infrastructure"</span>
+        <span>🖥️ IT Undergraduate @ SLIIT | IT Intern @ Expoceylon PLC | Network & Software Engineering</span>
     </div>
 
     <script>
+        // Mobile menu toggle functionality
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
         const navbar = document.getElementById('navbar');
@@ -613,43 +622,73 @@
                 navLinks.classList.toggle('active');
             });
         }
-        const links = document.querySelectorAll('.navbar ul li a');
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
-            });
-        });
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) navbar.classList.add('scrolled');
-            else navbar.classList.remove('scrolled');
-        });
 
-        const cards = document.querySelectorAll('.feature-card');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, idx) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('revealed'), idx * 100);
-                    observer.unobserve(entry.target);
+        // Close mobile menu when clicking a link
+        const allLinks = document.querySelectorAll('.navbar ul li a');
+        allLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
                 }
             });
-        }, { threshold: 0.2 });
-        cards.forEach(c => observer.observe(c));
+        });
 
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for feature cards reveal animation
+        const cards = document.querySelectorAll('.feature-card');
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -20px 0px'
+        };
+
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, idx) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('revealed');
+                    }, idx * 100);
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => {
+            cardObserver.observe(card);
+        });
+
+        // Observe detail card
         const detailCard = document.querySelector('.detail-card');
         if (detailCard) {
             const detailObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('revealed');
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        detailObserver.unobserve(entry.target);
+                    }
                 });
             }, { threshold: 0.2 });
             detailObserver.observe(detailCard);
         }
 
+        // Pre-reveal any cards already visible on load
         window.addEventListener('load', () => {
-            cards.forEach(c => {
-                if (c.getBoundingClientRect().top < window.innerHeight - 80) c.classList.add('revealed');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    card.classList.add('revealed');
+                }
             });
-            if (detailCard && detailCard.getBoundingClientRect().top < window.innerHeight - 80) detailCard.classList.add('revealed');
+            if (detailCard && detailCard.getBoundingClientRect().top < window.innerHeight - 100) {
+                detailCard.classList.add('revealed');
+            }
         });
     </script>
 </body>
