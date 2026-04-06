@@ -227,6 +227,44 @@
             gap: 2rem;
         }
 
+        /* Achievement Banner */
+        .achievement-banner {
+            background: linear-gradient(135deg, rgba(58, 183, 149, 0.25), rgba(10, 26, 47, 0.6));
+            border: 1px solid #3ab795;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            backdrop-filter: blur(4px);
+        }
+        .achievement-icon {
+            font-size: 2rem;
+        }
+        .achievement-text {
+            flex: 1;
+        }
+        .achievement-text h4 {
+            color: #b8f2e0;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+            font-family: 'Fira Code', monospace;
+        }
+        .achievement-text p {
+            color: #d0f0e8;
+            font-size: 0.9rem;
+        }
+        .achievement-highlight {
+            background: #3ab795;
+            color: #0a1a2f;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            font-family: monospace;
+            white-space: nowrap;
+        }
+
         /* Info Cards */
         .info-grid {
             display: grid;
@@ -262,7 +300,7 @@
             padding-left: 0;
         }
         .info-card ul li {
-            padding: 0.2rem 0;
+            padding: 0.3rem 0;
             padding-left: 1.2rem;
             position: relative;
         }
@@ -302,6 +340,19 @@
             color: #b8f2e0;
             font-family: monospace;
             border: 1px solid rgba(58, 183, 149, 0.4);
+        }
+
+        /* Solo Developer Note */
+        .solo-dev-note {
+            background: rgba(10, 26, 47, 0.5);
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px dashed #3ab795;
+        }
+        .solo-dev-note p {
+            color: #9cd4c2;
+            font-size: 0.85rem;
         }
 
         /* Image Gallery */
@@ -423,6 +474,7 @@
         }
         .back-link { animation-delay: 0s; animation-fill-mode: forwards; }
         .project-header { animation-delay: 0.1s; animation-fill-mode: forwards; }
+        .achievement-banner { animation-delay: 0.15s; animation-fill-mode: forwards; }
         .info-grid { animation-delay: 0.2s; animation-fill-mode: forwards; }
         .gallery-section { animation-delay: 0.3s; animation-fill-mode: forwards; }
 
@@ -450,6 +502,7 @@
             .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
             .menu-toggle { display: flex; }
             .live-link { margin-left: 0; margin-top: 0.5rem; display: inline-block; }
+            .achievement-highlight { white-space: normal; text-align: center; margin-top: 0.5rem; }
         }
     </style>
 </head>
@@ -484,6 +537,16 @@
         </div>
 
         <div class="project-content">
+            <!-- ACHIEVEMENT BANNER - KEY ADDITION -->
+            <div class="achievement-banner">
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-text">
+                    <h4>⚡ Built Within 1 Month of Joining</h4>
+                    <p>Developed from scratch — fully created by me as my first major internship project. Complete QR attendance system with real-time validation, reporting, and special power-outage mode.</p>
+                </div>
+                <div class="achievement-highlight">100% Solo Development</div>
+            </div>
+
             <!-- Info Grid -->
             <div class="info-grid">
                 <div class="info-card">
@@ -491,13 +554,15 @@
                     <p>QR Code-based Attendance Tracking System for branch employees of Expoceylon PLC. Employees scan unique QR codes to mark attendance with real-time validation and automated reporting for HR management.</p>
                 </div>
                 <div class="info-card">
-                    <h3>👨‍💻 My Role</h3>
+                    <h3>👨‍💻 My Role (Solo Developer)</h3>
                     <ul>
-                        <li>Full Stack Developer</li>
+                        <li><strong>Full Stack Developer</strong> - Entire system built by me</li>
                         <li>QR Code Generator & Scanner Integration</li>
-                        <li>Database Architecture</li>
+                        <li>Complete Database Architecture & Design</li>
                         <li>Real-time Attendance Validation Logic</li>
-                        <li>Report Generation Module</li>
+                        <li>Report Generation Module (PDF/Excel)</li>
+                        <li>UI/UX Design & Frontend Development</li>
+                        <li>Server Deployment & Configuration</li>
                     </ul>
                 </div>
                 <div class="info-card">
@@ -518,18 +583,24 @@
                 <p>🔋 <strong>Live System Features:</strong> Employees must have device plugged into charging to mark attendance (ensures accountability). Power Outage Mode available for branches with active outages — employees can log in without charging requirement during such events.</p>
             </div>
 
+            <!-- Solo Developer Note -->
+            <div class="solo-dev-note">
+                <p>✨ <strong>Note:</strong> This entire system was conceptualized, designed, developed, tested, and deployed by me within <strong>1 month</strong> of joining Expoceylon PLC as an IT Intern. No external development team involved — 100% self-built solution now actively used by the company.</p>
+            </div>
+
             <!-- Tech Stack -->
             <div class="info-card" style="margin-bottom: 0;">
                 <h3>🛠️ Technologies Used</h3>
                 <div class="tech-stack">
-                    <span class="tech-tag">PHP</span>
+                    <span class="tech-tag">PHP 8.x</span>
                     <span class="tech-tag">MySQL</span>
-                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">JavaScript (Vanilla)</span>
                     <span class="tech-tag">QR Code Library (phpqrcode)</span>
                     <span class="tech-tag">Bootstrap 5</span>
                     <span class="tech-tag">AJAX</span>
                     <span class="tech-tag">HTML5/CSS3</span>
                     <span class="tech-tag">cURL</span>
+                    <span class="tech-tag">Apache/Nginx</span>
                 </div>
             </div>
 
@@ -553,7 +624,7 @@
     </div>
 
     <div class="footer-note">
-        <span>📱 AttSys | QR Attendance System | Live at attsys.expoceylonplc.com | Expoceylon PLC Internship</span>
+        <span>📱 AttSys | QR Attendance System | Built from scratch within 1 month of joining | Live at attsys.expoceylonplc.com</span>
     </div>
 
     <script>
@@ -585,18 +656,15 @@
         
         const projectImages = [
             { filename: 'attsys1.jpg', caption: 'Login Page - Employee Authentication' },
-            { filename: 'attsys2.jpg', caption: 'QR Scanner Interface - Mark Attendance' },
+            { filename: 'attsys2.jpg', caption: 'Login - Charging Required Page (Device must be plugged in)' },
             { filename: 'attsys3.jpg', caption: 'Employee Dashboard - Attendance History' },
-            { filename: 'attsys4.jpg', caption: 'Admin Dashboard - Overview & Stats' },
+            { filename: 'attsys4.jpg', caption: 'Admin Dashboard - Overview & Statistics' },
             { filename: 'attsys5.jpg', caption: 'QR Code Generation for Employees' },
-            { filename: 'attsys6.jpg', caption: 'Attendance Reports & Export' },
-            { filename: 'attsys7.jpg', caption: 'Branch Management & Power Outage Mode' },
-            { filename: 'attsys8.jpg', caption: 'User Management & Role Settings' }
+            { filename: 'attsys6.jpg', caption: 'Attendance Reports & Export (PDF/Excel)' },
+            { filename: 'attsys7.jpg', caption: 'Branch Management Settings' },
+            { filename: 'attsys8.jpg', caption: 'Power Outage Mode - Active Branch Status' }
         ];
 
-        // Filter out any images that might not exist (show only first N that you have)
-        // By default it shows all 8, but if you have fewer, just remove entries above
-        
         // Populate gallery
         const galleryGrid = document.getElementById('galleryGrid');
         
@@ -662,25 +730,28 @@
         console.log('📱 AttSys Project Page Loaded');
         console.log('🌐 Live URL: https://attsys.expoceylonplc.com/');
         console.log('');
+        console.log('🏆 ACHIEVEMENT: Built this entire system from scratch within 1 month of joining Expoceylon PLC!');
+        console.log('');
         console.log('📸 IMAGE NAMING INSTRUCTIONS:');
         console.log('   Save your screenshots with these exact names in the same folder:');
-        console.log('   ┌─────────────────────────────────────────────────────┐');
-        console.log('   │  attsys1.jpg  - Login Page                          │');
-        console.log('   │  attsys2.jpg  - Login Charging required Page (only for employees)                │');
-        console.log('   │  attsys3.jpg  - Employee Dashboard                  │');
-        console.log('   │  attsys4.jpg  - Admin Dashboard                     │');
-        console.log('   │  attsys5.jpg  - QR Code Generation                  │');
-        console.log('   │  attsys6.jpg  - Attendance Reports                  │');
-        console.log('   │  attsys7.jpg  - Branch Management │');
-        console.log('   │  attsys8.jpg  - Power Outage Mode                 │');
-        console.log('   └─────────────────────────────────────────────────────┘');
+        console.log('   ┌─────────────────────────────────────────────────────────┐');
+        console.log('   │  attsys1.jpg  - Login Page                             │');
+        console.log('   │  attsys2.jpg  - Login - Charging Required Page         │');
+        console.log('   │  attsys3.jpg  - Employee Dashboard                     │');
+        console.log('   │  attsys4.jpg  - Admin Dashboard                        │');
+        console.log('   │  attsys5.jpg  - QR Code Generation                     │');
+        console.log('   │  attsys6.jpg  - Attendance Reports & Export            │');
+        console.log('   │  attsys7.jpg  - Branch Management                      │');
+        console.log('   │  attsys8.jpg  - Power Outage Mode                      │');
+        console.log('   └─────────────────────────────────────────────────────────┘');
         console.log('');
         console.log('   💡 TIPS:');
         console.log('   - You can use fewer images by removing entries from the projectImages array above');
         console.log('   - All images go in the same folder as this HTML file');
         console.log('   - Supported formats: JPG, PNG, GIF');
         console.log('');
-        console.log('🔋 Special Feature: Device charging requirement + Power outage mode (from live system)');
+        console.log('🔋 Special Features: Device charging requirement + Power outage mode (from live system)');
+        console.log('⚡ Timeline: Completed within 1 month of joining date — fully created by me');
     </script>
 </body>
 </html>
