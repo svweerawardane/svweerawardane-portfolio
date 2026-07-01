@@ -136,6 +136,64 @@
             font-size: 0.95rem;
         }
 
+        /* ROLE SECTION - FULL WIDTH */
+        .role-section {
+            background: rgba(15, 42, 63, 0.6);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            margin: 2rem 0 2.5rem;
+            border: 1px solid rgba(58, 183, 149, 0.25);
+        }
+
+        .role-section h2 {
+            color: #b8f2e0;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .role-section h2 span {
+            background: #3ab795;
+            color: #0a1a2f;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.8rem 1.5rem;
+        }
+
+        .role-grid .role-item {
+            color: #d0f0e8;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            padding-left: 1.3rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .role-grid .role-item::before {
+            content: '⚡';
+            position: absolute;
+            left: 0;
+            color: #3ab795;
+            font-size: 0.8rem;
+        }
+
+        .role-grid .role-item .icon {
+            font-size: 1.1rem;
+            margin-right: 0.2rem;
+        }
+
         /* GALLERY */
         .gallery-section {
             margin: 2.5rem 0;
@@ -275,6 +333,15 @@
             .gallery-grid {
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             }
+            .role-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .role-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -299,6 +366,8 @@
                 </p>
                 <br>
                 <p><strong>Stock Health:</strong> 71.8% Healthy · 12.8% Low Stock · 15.4% Out of Stock</p>
+                <br>
+                <p><strong>Key Stats:</strong> 39 Total Items · 5 Low Stock · 6 Out of Stock · Rs. 1,119,032.59 Stock Value</p>
             </div>
             <div class="detail-card">
                 <h3>⚙️ Key Features</h3>
@@ -309,7 +378,25 @@
                     <li><strong>Approval Flow</strong> – multi-level validation</li>
                     <li><strong>Automated Reordering</strong> – low stock alerts (5 items need reorder)</li>
                     <li><strong>Cloud-based Access</strong> – secure remote monitoring</li>
+                    <li><strong>Real-time Stock Tracking</strong> – live dashboard with health overview</li>
                 </ul>
+            </div>
+        </div>
+
+        <!-- 👨‍💻 MY ROLE (SOLO DEVELOPER) - FULL WIDTH -->
+        <div class="role-section">
+            <h2>
+                👨‍💻 My Role 
+                <span>Solo Developer</span>
+            </h2>
+            <div class="role-grid">
+                <div class="role-item"><span class="icon">🔧</span> Full Stack Developer – Entire system built by me</div>
+                <div class="role-item"><span class="icon">📱</span> QR Code Generator & Scanner Integration</div>
+                <div class="role-item"><span class="icon">🗄️</span> Complete Database Architecture & Design</div>
+                <div class="role-item"><span class="icon">⏱️</span> Real-time Attendance Validation Logic</div>
+                <div class="role-item"><span class="icon">📊</span> Report Generation Module (PDF/Excel)</div>
+                <div class="role-item"><span class="icon">🎨</span> UI/UX Design & Frontend Development</div>
+                <div class="role-item"><span class="icon">🚀</span> Server Deployment & Configuration</div>
             </div>
         </div>
 
@@ -391,13 +478,6 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
                 closeModal();
-            }
-        });
-
-        // Also allow clicking on any image to open modal (delegation)
-        document.addEventListener('click', function(e) {
-            if (e.target.tagName === 'IMG' && e.target.closest('.gallery-item')) {
-                // Already handled by inline onclick, but just in case
             }
         });
     </script>
