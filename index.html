@@ -238,6 +238,19 @@
             border-left: 4px solid #3ab795;
             color: #e0f5ef;
         }
+        .pill.grad {
+            background: linear-gradient(110deg, #0f2a3f, #1a3a4a);
+            border-left: 4px solid #f5c542;
+            color: #ffe9b0;
+        }
+        .pill.grad i {
+            color: #ffd966;
+        }
+        .pill.completed {
+            background: linear-gradient(110deg, #0f2a3f, #1a3a4a);
+            border-left: 4px solid #6ed4b5;
+            color: #d4ffe0;
+        }
         .pill:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(58, 183, 149, 0.3);
@@ -395,6 +408,11 @@
             font-size: 0.9rem;
             border: 1px solid #3ab795;
         }
+        .detail-title .completed-badge {
+            background: #6ed4b520;
+            border-color: #6ed4b5;
+            color: #d4ffe0;
+        }
         .responsibility-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -526,49 +544,49 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION - using original hero.jpg image -->
+    <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-text">
-            <!-- Added status badges showing undergraduate and internship -->
+            <!-- Updated status badges: Graduated with Second Class Upper + Completed Internship -->
             <div class="status-badge">
-                <span class="pill"><i>🎓</i> IT Undergraduate @ SLIIT City Uni</span>
-                <span class="pill intern"><i>⚡</i> IT Intern @ Expoceylon PLC</span>
+                <span class="pill grad"><i>🎓</i> BSc (Hons) IT — Second Class Upper</span>
+                <span class="pill completed"><i>✅</i> IT Internship Completed @ Expoceylon PLC</span>
             </div>
             <h1>Hi, I'm <span>Shevon</span>!</h1>
             <p>
-                I am currently an <strong>IT undergraduate at SLIIT City University</strong>, specializing in 
+                I am a <strong>recent IT graduate from SLIIT City University</strong>, having earned my degree with 
+                <strong>Second Class Upper Honours</strong>, specializing in 
                 <strong>Computer Networking, Hardware, Web Development, and Security</strong>. 
-                Alongside my studies, I'm gaining real-world experience as an <strong>IT Intern at Expoceylon PLC</strong>, 
-                supporting daily IT operations, ERP systems, hardware maintenance, and security infrastructure.
-                I create practical IT solutions and explore new technologies through hands-on projects.
+                I completed a <strong>6-month IT internship at Expoceylon PLC</strong>, supporting daily IT operations, 
+                ERP systems, hardware maintenance, and security infrastructure. I create practical IT solutions 
+                and explore new technologies through hands-on projects.
             </p>
             <a href="projects.html" class="btn">View My Projects →</a>
         </div>
 
         <div class="hero-image">
             <div class="hero-img-border">
-                <!-- Original hero.jpg image - preserved exactly as in your code -->
                 <img src="hero.jpg" alt="Shevon Weerawardane">
             </div>
         </div>
     </section>
 
-    <!-- Detailed Internship Section - showing your exact responsibilities at Expoceylon PLC -->
+    <!-- Detailed Internship Section - Updated to show completed status -->
     <div class="internship-detail">
         <div class="detail-card" id="internDetail">
             <div class="detail-title">
                 🔧 Expoceylon PLC — IT Internship Experience
-                <span>hands-on role</span>
+                <span class="completed-badge">✅ Completed (6 Months)</span>
             </div>
             <div class="responsibility-grid">
                 <div class="resp-item">
                     <strong>📋 ERP System Management</strong>
-                    <p>Supporting daily IT operations with enterprise ERP system management, ensuring data integrity, user access control, and smooth business workflows.</p>
+                    <p>Supported daily IT operations with enterprise ERP system management, ensuring data integrity, user access control, and smooth business workflows.</p>
                     <span class="tech-tag">ERP • Data Governance • User Access</span>
                 </div>
                 <div class="resp-item">
                     <strong>🖥️ Hardware Maintenance</strong>
-                    <p>Managing hardware lifecycle, troubleshooting workstations, servers, and IT infrastructure. Ensuring reliable business continuity.</p>
+                    <p>Managed hardware lifecycle, troubleshooting workstations, servers, and IT infrastructure. Ensured reliable business continuity.</p>
                     <span class="tech-tag">Hardware • Servers • Asset Management</span>
                 </div>
                 <div class="resp-item">
@@ -578,12 +596,14 @@
                 </div>
                 <div class="resp-item">
                     <strong>⚙️ Professional IT Workflows</strong>
-                    <p>Contributing to efficient business operations via professional IT workflows, documentation, and cross-department collaboration.</p>
+                    <p>Contributed to efficient business operations via professional IT workflows, documentation, and cross-department collaboration.</p>
                     <span class="tech-tag">ITIL • SLA Management • Automation</span>
                 </div>
             </div>
             <p style="margin-top: 1.2rem; color: #b8f2e0; font-size: 0.85rem; border-top: 1px solid #3ab79540; padding-top: 1rem; text-align: center;">
-                Gaining hands-on experience in troubleshooting, security systems, and professional IT workflows while contributing to efficient business operations.
+                Successfully completed a 6-month internship, gaining hands-on experience in troubleshooting, security systems, 
+                and professional IT workflows while contributing to efficient business operations. 
+                <em>(Concluded 3 weeks early to focus on final examinations.)</em>
             </p>
         </div>
     </div>
@@ -603,12 +623,12 @@
         <div class="feature-card">
             <div class="feature-icon">🔐</div>
             <h3>IT Infrastructure</h3>
-            <p>ERP management, hardware maintenance, security systems, and professional IT workflows — ensuring reliable infrastructure at Expoceylon PLC.</p>
+            <p>ERP management, hardware maintenance, security systems, and professional IT workflows — with hands-on experience at Expoceylon PLC.</p>
         </div>
     </div>
 
     <div class="footer-note">
-        <span>🖥️ IT Undergraduate @ SLIIT | IT Intern @ Expoceylon PLC | Network & Software Engineering</span>
+        <span>🖥️ IT Graduate (Second Class Upper) @ SLIIT | Ex-IT Intern @ Expoceylon PLC | Network & Software Engineering</span>
     </div>
 
     <script>
