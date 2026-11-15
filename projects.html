@@ -5,655 +5,1041 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Projects | Shevon Weerawardane | Network & Software Engineer</title>
     <style>
+        /* ===== RESET & BASE ===== */
         * {
-            margin: 0; 
+            margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
         :root {
-            --dark-deep: #0a1a2f;
-            --dark-primary: #0f2a3f;
-            --accent-blue: #1e4a76;
-            --accent-cyan: #2c7da0;
-            --light-green-mint: #d0f0e8;
-            --light-green-soft: #e2f3ef;
-            --green-accent: #2e9c7c;
-            --green-bright: #3ab795;
-            --text-light: #eaf4f0;
-            --text-dark: #0f2a2a;
+            --bg: #0a0e14;
+            --bg-soft: #0f141c;
+            --bg-card: #131a24;
+            --border: #1e2a3a;
+            --border-hover: #2a3f55;
+            --green: #00e5a0;
+            --green-dim: #00b37d;
+            --green-glow: rgba(0, 229, 160, 0.12);
+            --cyan: #00c8ff;
+            --amber: #f0b34a;
+            --text: #d4e0ed;
+            --text-soft: #7d8fa3;
+            --text-dim: #4a5a6a;
+            --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
-            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
-            color: var(--dark-deep);
-            line-height: 1.5;
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* Animated network node background */
-        body::before {
-            content: '';
+        /* ===== SUBTLE BACKGROUND ===== */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-canvas canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--green-dim);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
-            background-size: 35px 35px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f2a3f;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3ab795;
-            border-radius: 10px;
-        }
-
-        /* ===== GLASS NAVBAR ===== */
-        .navbar {
+            right: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            background: rgba(10, 26, 47, 0.75);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
+            padding: 0.9rem 6%;
+            background: rgba(10, 14, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all 0.35s ease;
         }
 
         .navbar.scrolled {
-            background: rgba(10, 26, 47, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom-color: #3ab795;
+            background: rgba(10, 14, 20, 0.92);
+            border-bottom-color: var(--border);
         }
 
-        .logo h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #b8f2e0, #3ab795);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-            font-family: 'Fira Code', monospace;
-        }
-        .logo p {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #9cd4c2;
-            letter-spacing: 1.5px;
-            margin-top: -6px;
-        }
-
-        .navbar ul {
+        .logo {
             display: flex;
-            gap: 2.2rem;
-            list-style: none;
-        }
-        .navbar ul li a {
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #d0f0e8;
-            transition: 0.25s ease;
-            position: relative;
-            padding: 0.5rem 0;
-            font-family: 'Fira Code', monospace;
-        }
-        .navbar ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: linear-gradient(90deg, #3ab795, #2e9c7c);
-            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .navbar ul li a:hover::after,
-        .navbar ul li a.active::after {
-            width: 100%;
-        }
-        .navbar ul li a.active {
-            color: #b8f2e0;
-            font-weight: 700;
-        }
-        .navbar ul li a:hover {
-            color: #c8ffe6;
         }
 
-        .menu-toggle {
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            border: 1.5px solid var(--green-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .logo-text {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text .dot {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-links a.active {
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--text-soft);
+            padding: 0.35rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pill .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+            animation: blink 2.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        .menu-btn {
             display: none;
             flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
             cursor: pointer;
-            gap: 5px;
-        }
-        .menu-toggle span {
-            width: 28px;
-            height: 3px;
-            background: #3ab795;
-            border-radius: 3px;
+            padding: 6px;
+            z-index: 1002;
         }
 
-        /* ===== PROJECTS SECTION ===== */
-        .projects {
-            max-width: 1400px;
-            margin: 2rem auto 4rem;
-            padding: 2rem 5%;
+        .menu-btn span {
+            width: 22px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
             position: relative;
             z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 7rem 6% 1.5rem;
         }
 
-        .projects h1 {
-            font-size: 3.5rem;
+        .prompt {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt .symbol {
+            color: var(--green);
+        }
+
+        .prompt .cmd {
+            color: var(--text-soft);
+        }
+
+        .prompt .cursor {
+            display: inline-block;
+            width: 7px;
+            height: 15px;
+            background: var(--green);
+            animation: cursorBlink 1.1s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .page-header h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
+            line-height: 1.12;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #0f2a3f;
-            margin-bottom: 2.5rem;
-            border-left: 4px solid #3ab795;
+        .page-header h1 .accent {
+            color: var(--green);
+        }
+
+        .page-sub {
+            font-family: var(--mono);
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            border-left: 2px solid var(--green-dim);
             padding-left: 1rem;
-            font-family: 'Fira Code', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1rem 6% 0;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-soft);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-btn:hover {
+            color: var(--text);
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .filter-btn.active {
+            color: var(--green);
+            border-color: rgba(0, 229, 160, 0.35);
+            background: var(--green-glow);
+        }
+
+        /* ===== PROJECTS GRID ===== */
+        .projects-section {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 6% 3rem;
         }
 
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.3rem;
         }
 
         .project-card {
-            background: rgba(10, 26, 47, 0.65);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            padding: 1.5rem;
-            border: 1px solid rgba(58, 183, 149, 0.4);
-            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.6rem;
             position: relative;
             overflow: hidden;
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green), transparent);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
         }
 
         .project-card:hover {
-            transform: translateY(-8px);
-            border-color: #3ab795;
-            background: rgba(10, 26, 47, 0.8);
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3);
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            background: var(--bg-card);
+        }
+
+        .project-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
         }
 
         .project-card h3 {
-            font-size: 1.5rem;
-            color: #b8f2e0;
-            margin-bottom: 0.5rem;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            font-family: monospace;
+            color: var(--text);
+            letter-spacing: -0.2px;
         }
 
-        .tag.completed {
-            background: #2e9c7c;
-            color: #0a1a2f;
+        .p-tag {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .tag.pending {
-            background: #c98a2e;
-            color: #0a1a2f;
-        }
-
-        .tag.internship {
-            background: #3ab795;
-            color: #0a1a2f;
-        }
-
-        .tag.export {
-            background: #1e7a8f;
-            color: #eaf4f0;
-        }
-
-        .tag.it {
-            background: #6c8c9c;
-            color: #eaf4f0;
-        }
+        .p-tag.it { background: rgba(108, 140, 156, 0.12); color: #93b4c7; border: 1px solid rgba(108, 140, 156, 0.25); }
+        .p-tag.export { background: rgba(0, 200, 255, 0.08); color: var(--cyan); border: 1px solid rgba(0, 200, 255, 0.2); }
+        .p-tag.internship { background: rgba(0, 229, 160, 0.08); color: var(--green); border: 1px solid rgba(0, 229, 160, 0.25); }
+        .p-tag.completed { background: rgba(0, 229, 160, 0.06); color: var(--green-dim); border: 1px solid rgba(0, 229, 160, 0.15); }
+        .p-tag.pending { background: rgba(240, 179, 74, 0.08); color: var(--amber); border: 1px solid rgba(240, 179, 74, 0.2); }
 
         .project-card p {
-            color: #d0f0e8;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            line-height: 1.7;
+            margin-bottom: 0.9rem;
+        }
+
+        .project-card p strong {
+            color: var(--green-dim);
+            font-weight: 500;
         }
 
         .project-card ul {
             list-style: none;
             margin-bottom: 1.2rem;
+            flex-grow: 1;
         }
 
         .project-card ul li {
-            color: #9cd4c2;
-            font-size: 0.85rem;
-            padding: 0.2rem 0;
-            padding-left: 1.2rem;
+            font-size: 0.76rem;
+            color: var(--text-soft);
+            padding: 0.25rem 0 0.25rem 1.1rem;
             position: relative;
+            line-height: 1.6;
         }
 
         .project-card ul li::before {
             content: '▹';
             position: absolute;
             left: 0;
-            color: #3ab795;
+            color: var(--green-dim);
+            font-size: 0.8rem;
         }
 
-        .btn {
-            display: inline-block;
-            background: linear-gradient(95deg, #0f2a3f, #1b4e5e);
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 40px;
-            text-decoration: none;
+        .project-card ul li strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.72rem;
             font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(58, 183, 149, 0.6);
-            font-family: 'Fira Code', monospace;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px -8px #3ab795;
-            background: linear-gradient(95deg, #1a4a5e, #0f2a3f);
-            border-color: #8eddc2;
-        }
-
-        /* Image Gallery Modal for Project Details */
-        .image-gallery {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            margin: 1rem 0;
-            cursor: pointer;
-        }
-        .gallery-thumb {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid rgba(58, 183, 149, 0.5);
+            color: var(--green);
+            text-decoration: none;
+            padding: 0.45rem 0;
+            letter-spacing: 0.5px;
             transition: all 0.2s;
-        }
-        .gallery-thumb:hover {
-            transform: scale(1.05);
-            border-color: #3ab795;
+            align-self: flex-start;
+            border-bottom: 1px solid transparent;
         }
 
-        /* Modal Styles */
+        .btn-link:hover {
+            color: var(--green-dim);
+            border-bottom-color: var(--green-dim);
+        }
+
+        .btn-link .arrow {
+            transition: transform 0.2s;
+        }
+
+        .btn-link:hover .arrow {
+            transform: translateX(3px);
+        }
+
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 26, 47, 0.95);
-            backdrop-filter: blur(15px);
-            z-index: 2000;
+            inset: 0;
+            background: rgba(5, 8, 12, 0.96);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
             justify-content: center;
             align-items: center;
             cursor: pointer;
         }
+
         .modal.active {
             display: flex;
         }
+
         .modal img {
             max-width: 90%;
-            max-height: 85%;
-            border-radius: 20px;
-            border: 3px solid #3ab795;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-height: 85vh;
+            border-radius: 10px;
+            border: 1px solid var(--border-hover);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
+
         .modal-close {
             position: absolute;
             top: 20px;
-            right: 30px;
-            font-size: 2rem;
-            color: #3ab795;
+            right: 28px;
+            font-size: 1.8rem;
+            color: var(--text-soft);
             cursor: pointer;
-            font-family: monospace;
+            font-family: var(--mono);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            line-height: 1;
         }
 
-        /* Footer */
-        .footer-note {
+        .modal-close:hover {
+            color: var(--green);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            margin: 2rem auto 3rem;
-            font-size: 0.85rem;
-            color: #0a1a2f;
-            font-family: 'Fira Code', monospace;
-        }
-        .footer-note span {
-            background: #0f2a3f;
-            padding: 0.4rem 1.5rem;
-            border-radius: 40px;
-            display: inline-block;
-            border: 1px solid #3ab795;
-            color: #b8f2e0;
-            backdrop-filter: blur(4px);
+            padding: 2rem 6%;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
         }
 
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
+        .footer-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
         }
-        .projects h1, .subtitle, .project-card {
-            animation: fadeUp 0.6s ease forwards;
+
+        .footer-inner .hl {
+            color: var(--green-dim);
+        }
+
+        .footer-inner .sep {
+            color: var(--border-hover);
+            margin: 0 4px;
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal {
             opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
         }
-        .projects h1 { animation-delay: 0s; animation-fill-mode: forwards; }
-        .subtitle { animation-delay: 0.1s; animation-fill-mode: forwards; }
-        .project-card:nth-child(1) { animation-delay: 0.2s; animation-fill-mode: forwards; }
-        .project-card:nth-child(2) { animation-delay: 0.3s; animation-fill-mode: forwards; }
-        .project-card:nth-child(3) { animation-delay: 0.4s; animation-fill-mode: forwards; }
-        .project-card:nth-child(4) { animation-delay: 0.5s; animation-fill-mode: forwards; }
-        .project-card:nth-child(5) { animation-delay: 0.6s; animation-fill-mode: forwards; }
-        .project-card:nth-child(6) { animation-delay: 0.7s; animation-fill-mode: forwards; }
-        .project-card:nth-child(7) { animation-delay: 0.8s; animation-fill-mode: forwards; }
-        .project-card:nth-child(8) { animation-delay: 0.9s; animation-fill-mode: forwards; }
-        .project-card:nth-child(9) { animation-delay: 1s; animation-fill-mode: forwards; }
-        .project-card:nth-child(10) { animation-delay: 1.1s; animation-fill-mode: forwards; }
 
-        @media (max-width: 850px) {
-            .projects h1 { font-size: 2.5rem; }
-            .project-grid { grid-template-columns: 1fr; }
-            .navbar ul {
-                gap: 1rem;
-                background: rgba(10, 26, 47, 0.96);
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                flex-direction: column;
-                padding: 1.5rem;
-                text-align: center;
-                backdrop-filter: blur(20px);
-                transform: scaleY(0);
-                transform-origin: top;
-                transition: 0.3s;
-                opacity: 0;
-                pointer-events: none;
-                border-radius: 0 0 24px 24px;
+        .reveal.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .status-pill {
+                display: none;
             }
-            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
-            .menu-toggle { display: flex; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 5%;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                flex-direction: column;
+                background: rgba(10, 14, 20, 0.98);
+                backdrop-filter: blur(20px);
+                padding: 5rem 1.5rem 2rem;
+                gap: 0.4rem;
+                border-left: 1px solid var(--border);
+                transition: right 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.9rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .page-header {
+                padding-top: 6rem;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                padding: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding-top: 5.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.9rem;
+                letter-spacing: -1.5px;
+            }
+
+            .project-card h3 {
+                font-size: 1rem;
+            }
+
+            .filter-btn {
+                font-size: 0.65rem;
+                padding: 0.35rem 0.7rem;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- Background canvas -->
+    <div class="bg-canvas">
+        <canvas id="netCanvas"></canvas>
+    </div>
+    <div class="bg-noise"></div>
+
+    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
-        <div class="logo">
-            <h2>Shevon</h2>
-            <p>NETWORK & SOFTWARE</p>
-        </div>
-        <ul id="navLinks">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="projects.html" class="active">Projects</a></li>
-            <li><a href="skills.html">Skills</a></li>
-            <li><a href="contact.html">Contact</a></li>
+        <a href="index.html" class="logo">
+            <div class="logo-mark">S</div>
+            <div class="logo-text">shevon<span class="dot">.</span>weerawardane</div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">home</a></li>
+            <li><a href="about.html">about</a></li>
+            <li><a href="projects.html" class="active">projects</a></li>
+            <li><a href="skills.html">skills</a></li>
+            <li><a href="contact.html">contact</a></li>
         </ul>
-        <div class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="nav-right">
+            <div class="status-pill">
+                <span class="dot"></span>
+                open to work
+            </div>
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <section class="projects">
-        <h1>My Projects</h1>
-        <p class="subtitle">Web • Applications • Networking • Security • Internship Work @ Expoceylon PLC</p>
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <div class="prompt">
+            <span class="symbol">$</span>
+            <span class="cmd">ls ~/projects</span>
+            <span class="cursor"></span>
+        </div>
+        <h1>My <span class="accent">Projects</span></h1>
+        <p class="page-sub">Web · Applications · Networking · Security · Internship Work @ Expoceylon PLC</p>
+    </section>
 
-        <div class="project-grid">
+    <!-- FILTER BAR -->
+    <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">all</button>
+        <button class="filter-btn" data-filter="internship">internship</button>
+        <button class="filter-btn" data-filter="academic">academic</button>
+        <button class="filter-btn" data-filter="security">security</button>
+    </div>
+
+    <!-- PROJECTS -->
+    <section class="projects-section">
+        <div class="project-grid" id="projectGrid">
 
             <!-- PROJECT 1: Expo IMS (IT Department) -->
-            <div class="project-card">
-                <h3>💻 Expo IMS (IT Dept)</h3>
-                <span class="tag it">IT Department System</span>
+            <div class="project-card reveal" data-category="internship">
+                <div class="project-top">
+                    <h3>Expo IMS (IT Dept)</h3>
+                    <span class="p-tag it">IT dept</span>
+                </div>
                 <p>
-                    <strong>Inventory Management System</strong> developed for Expoceylon PLC's <strong>IT Department</strong> 
+                    <strong>Inventory Management System</strong> developed for Expoceylon PLC's IT Department
                     to track IT assets, manage hardware/software inventory, and streamline IT procurement.
                     Built as part of my internship contribution.
                 </p>
                 <ul>
                     <li>Role: Developer & IT Support</li>
-                    <li>Technologies: PHP, MySQL, Bootstrap, JavaScript</li>
-                    <li>Features: Asset tracking, supplier management, reporting, IT asset lifecycle</li>
+                    <li>Stack: PHP, MySQL, Bootstrap, JavaScript</li>
+                    <li>Asset tracking, supplier management, reporting</li>
                 </ul>
-                <a href="expoims.html" class="btn">View Details</a>
+                <a href="expoims.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 2: INNSYS System (Export & Transport Department) -->
-            <div class="project-card">
-                <h3>🚢 INNSYS System</h3>
-                <span class="tag export">Export & Transport Dept</span>
+            <!-- PROJECT 2: INNSYS System -->
+            <div class="project-card reveal" data-category="internship">
+                <div class="project-top">
+                    <h3>INNSYS System</h3>
+                    <span class="p-tag export">export & transport</span>
+                </div>
                 <p>
-                    <strong>Intelligent Inventory & Network System</strong> – a unified platform for <strong>Export & Transport</strong> 
-                    operations with real-time stock visibility, automated reordering, and secure cloud-based access. 
+                    <strong>Intelligent Inventory & Network System</strong> — a unified platform for Export & Transport
+                    operations with real-time stock visibility, automated reordering, and secure cloud-based access.
                     Features live dashboards and health monitoring for shipping & warehouse management.
                 </p>
                 <ul>
                     <li><strong>Role:</strong> Developer & System Integrator</li>
-                    <li><strong>Technologies:</strong> PHP, MySQL, Bootstrap, JavaScript, AES-256</li>
-                    <li><strong>Features:</strong> Item Master, Stock In/Out, Supplier Mgmt, Approval Flow, Stock Health (71.8% healthy)</li>
+                    <li><strong>Stack:</strong> PHP, MySQL, Bootstrap, JavaScript, AES-256</li>
+                    <li>Item master, stock in/out, approval flow, health dashboard</li>
                 </ul>
-                <a href="innsys.html" class="btn">View Details</a>
+                <a href="innsys.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 3: Expo IMD (Information Management Dashboard) -->
-            <div class="project-card">
-                <h3>🔐 Expo IMD</h3>
-                <span class="tag internship">Internship Project @ Expoceylon</span>
+            <!-- PROJECT 3: Expo IMD -->
+            <div class="project-card reveal" data-category="internship security">
+                <div class="project-top">
+                    <h3>Expo IMD</h3>
+                    <span class="p-tag internship">internship</span>
+                </div>
                 <p>
-                    Information Management Dashboard for storing and managing email addresses, phone numbers, CCTV access credentials, 
-                    and other account login details securely for company IT use.
+                    Information Management Dashboard for storing and managing email addresses, phone numbers,
+                    CCTV access credentials, and other account login details securely for company IT use.
                 </p>
                 <ul>
                     <li>Role: Developer & Security Coordinator</li>
-                    <li>Technologies: PHP, MySQL, AES Encryption, Bootstrap</li>
-                    <li>Features: Secure credential storage, access logs, user roles</li>
+                    <li>Stack: PHP, MySQL, AES Encryption, Bootstrap</li>
+                    <li>Secure credential storage, access logs, user roles</li>
                 </ul>
-                <a href="expoimd.html" class="btn">View Details</a>
+                <a href="expoimd.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 4: AttSys (Attendance System with QR) -->
-            <div class="project-card">
-                <h3>📱 AttSys - QR Attendance System</h3>
-                <span class="tag internship">Internship Project @ Expoceylon</span>
+            <!-- PROJECT 4: AttSys -->
+            <div class="project-card reveal" data-category="internship">
+                <div class="project-top">
+                    <h3>AttSys — QR Attendance</h3>
+                    <span class="p-tag internship">internship</span>
+                </div>
                 <p>
-                    Attendance tracking system using QR codes for branch employees. Employees scan unique QR codes to mark attendance, 
-                    with real-time logging and reporting for HR management.
+                    Attendance tracking system using QR codes for branch employees. Employees scan unique QR codes
+                    to mark attendance, with real-time logging and reporting for HR management.
                 </p>
                 <ul>
                     <li>Role: Full Stack Developer</li>
-                    <li>Technologies: PHP, MySQL, JavaScript (QR Scanner API), Bootstrap</li>
-                    <li>Features: QR generation, real-time validation, export reports</li>
+                    <li>Stack: PHP, MySQL, JS (QR Scanner API), Bootstrap</li>
+                    <li>QR generation, real-time validation, export reports</li>
                 </ul>
-                <a href="attsys.html" class="btn">View Details</a> 
+                <a href="attsys.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 5: Petnest Website -->
-            <div class="project-card">
-                <h3>🐾 Petnest Website</h3>
-                <span class="tag completed">Completed Assignment</span>
+            <!-- PROJECT 5: Petnest -->
+            <div class="project-card reveal" data-category="academic">
+                <div class="project-top">
+                    <h3>Petnest Website</h3>
+                    <span class="p-tag completed">completed</span>
+                </div>
                 <p>A pet services platform developed with full frontend and backend functionality, allowing service listings and basic management features.</p>
-                <ul><li>Technologies: HTML, CSS, JavaScript, PHP, MySQL</li></ul>
-                <a href="petnest.html" class="btn">View Details</a>
+                <ul>
+                    <li>Stack: HTML, CSS, JavaScript, PHP, MySQL</li>
+                </ul>
+                <a href="petnest.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 6: ETF Web Application -->
-            <div class="project-card">
-                <h3>📊 ETF Web Application</h3>
-                <span class="tag completed">Completed Assignment</span>
+            <!-- PROJECT 6: ETF Web App -->
+            <div class="project-card reveal" data-category="academic">
+                <div class="project-top">
+                    <h3>ETF Web Application</h3>
+                    <span class="p-tag completed">completed</span>
+                </div>
                 <p>A record management web application developed to manage ETF-related data efficiently with database integration.</p>
-                <ul><li>Technologies: HTML, CSS, PHP, MySQL</li></ul>
-                <a href="etf.html" class="btn">View Details</a>
+                <ul>
+                    <li>Stack: HTML, CSS, PHP, MySQL</li>
+                </ul>
+                <a href="etf.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 7: ACR Prime Mart Pvt Ltd -->
-            <div class="project-card">
-                <h3>🛒 ACR Prime Mart Pvt Ltd</h3>
-                <span class="tag pending">Not Hosted Yet</span>
+            <!-- PROJECT 7: ACR Prime Mart -->
+            <div class="project-card reveal" data-category="academic">
+                <div class="project-top">
+                    <h3>ACR Prime Mart Pvt Ltd</h3>
+                    <span class="p-tag pending">not hosted</span>
+                </div>
                 <p>A fully developed business website for a retail mart, including frontend and backend systems.</p>
-                <ul><li>Technologies: HTML, CSS, JavaScript, PHP, MySQL</li></ul>
-                <a href="acrmart.html" class="btn">View Details</a>
+                <ul>
+                    <li>Stack: HTML, CSS, JavaScript, PHP, MySQL</li>
+                </ul>
+                <a href="acrmart.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 8: Hospital Management System -->
-            <div class="project-card">
-                <h3>🏥 Hospital Management System</h3>
-                <span class="tag completed">Completed Assignment</span>
+            <!-- PROJECT 8: Hospital Management -->
+            <div class="project-card reveal" data-category="academic">
+                <div class="project-top">
+                    <h3>Hospital Management System</h3>
+                    <span class="p-tag completed">completed</span>
+                </div>
                 <p>A hospital management system designed to manage patient records and support basic hospital operations.</p>
-                <ul><li>Technologies: PHP, MySQL, Java</li></ul>
-                <a href="hospital.html" class="btn">View Details</a>
+                <ul>
+                    <li>Stack: PHP, MySQL, Java</li>
+                </ul>
+                <a href="hospital.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
             <!-- PROJECT 9: DispenseApp & QuizApp -->
-            <div class="project-card">
-                <h3>🎮 DispenseApp & QuizApp</h3>
-                <span class="tag completed">Completed Assignment</span>
+            <div class="project-card reveal" data-category="academic">
+                <div class="project-top">
+                    <h3>DispenseApp & QuizApp</h3>
+                    <span class="p-tag completed">completed</span>
+                </div>
                 <p>Java-based desktop applications demonstrating GUI design and Data Structures & Algorithms concepts.</p>
-                <ul><li>Technologies: Java, Swing, DSA</li></ul>
-                <a href="dispense-quiz.html" class="btn">View Details</a>
+                <ul>
+                    <li>Stack: Java, Swing, DSA</li>
+                </ul>
+                <a href="dispense-quiz.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
-            <!-- PROJECT 10: Security Vulnerability Assessment -->
-            <div class="project-card">
-                <h3>🔒 Security Assessment – UTE CAT Pvt Ltd</h3>
-                <span class="tag completed">Completed</span>
-                <p>Conducted a security vulnerability assessment to identify system weaknesses and recommend security improvements.</p>
-                <ul><li>Role: Security Analyst (Academic Project)</li></ul>
-                <a href="security-assessment.html" class="btn">View Details</a>
+            <!-- PROJECT 10: Security Assessment -->
+            <div class="project-card reveal" data-category="security academic">
+                <div class="project-top">
+                    <h3>Security Assessment — UTE CAT</h3>
+                    <span class="p-tag completed">completed</span>
+                </div>
+                <p>Conducted a security vulnerability assessment to identify system weaknesses and recommend security improvements for UTE CAT Pvt Ltd.</p>
+                <ul>
+                    <li>Role: Security Analyst (Academic Project)</li>
+                    <li>Focus: Vulnerability scanning, risk reporting, remediation plan</li>
+                </ul>
+                <a href="security-assessment.html" class="btn-link">view details <span class="arrow">→</span></a>
             </div>
 
         </div>
     </section>
 
-    <!-- Modal for Image Gallery -->
+    <!-- IMAGE MODAL -->
     <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
+        <button class="modal-close" aria-label="Close">&times;</button>
         <img id="modalImage" src="" alt="Project Screenshot">
     </div>
 
-    <div class="footer-note">
-        <span>🚢 INNSYS (Export & Transport) • 💻 Expo IMS (IT Dept) • 🔐 Expo IMD • 📱 AttSys — IT Internship @ Expoceylon PLC</span>
-    </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="hl">Shevon Weerawardane</span>
+            <span class="sep">|</span>
+            <span>IT Graduate (Second Class Upper)</span>
+            <span class="sep">|</span>
+            <span>Ex-IT Intern @ Expoceylon PLC</span>
+            <span class="sep">|</span>
+            <span>Network & Software Engineering</span>
+        </div>
+    </footer>
 
     <script>
-        // Mobile menu
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        const navbar = document.getElementById('navbar');
+        /* ===== NETWORK CANVAS ===== */
+        const canvas = document.getElementById('netCanvas');
+        const ctx = canvas.getContext('2d');
+        let nodes = [];
+        const mouse = { x: null, y: null, r: 130 };
 
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-        document.querySelectorAll('.navbar ul li a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
-            });
-        });
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) navbar.classList.add('scrolled');
-            else navbar.classList.remove('scrolled');
+        resize();
+        window.addEventListener('resize', () => {
+            resize();
+            buildNodes();
         });
 
-        // ========== IMAGE GALLERY CONFIGURATION ==========
-        // Define images for each project - Save your images with these exact names in the same folder
-        
-        const projectImages = {
-            'expo-ims': {
-                name: 'Expo IMS - IT Department Inventory System',
-                images: [
-                    'expo-ims-1.jpg', 'expo-ims-2.jpg', 'expo-ims-3.jpg', 'expo-ims-4.jpg', 'expo-ims-5.jpg'
-                ]
-            },
-            'expo-imd': {
-                name: 'Expo IMD - Information Management Dashboard',
-                images: [
-                    'expo-imd-1.jpg', 'expo-imd-2.jpg', 'expo-imd-3.jpg', 'expo-imd-4.jpg', 'expo-imd-5.jpg'
-                ]
-            },
-            'attsys': {
-                name: 'AttSys - QR Attendance System',
-                images: [
-                    'attsys-1.jpg', 'attsys-2.jpg', 'attsys-3.jpg', 'attsys-4.jpg', 'attsys-5.jpg'
-                ]
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.r = Math.random() * 1.8 + 0.4;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.o = Math.random() * 0.4 + 0.15;
             }
-        };
-
-        // Populate galleries and attach click handlers
-        document.querySelectorAll('.view-gallery').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const projectId = btn.getAttribute('data-project');
-                const images = projectImages[projectId]?.images || [];
-                if (images.length > 0) {
-                    // Open first image in modal
-                    openModal(images[0]);
-                } else {
-                    alert('Please add screenshots to the images folder. Save images with names like: ' + 
-                          (projectImages[projectId]?.images.join(', ') || ''));
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const f = (mouse.r - d) / mouse.r;
+                        this.x += (dx / d) * f * 1.8;
+                        this.y += (dy / d) * f * 1.8;
+                    }
                 }
-            });
-        });
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 229, 160, ${this.o})`;
+                ctx.fill();
+            }
+        }
 
-        // Also create clickable thumbnails dynamically
-        for (const [projectId, data] of Object.entries(projectImages)) {
-            const galleryDiv = document.querySelector(`.image-gallery[data-project="${projectId}"]`);
-            if (galleryDiv) {
-                data.images.forEach(img => {
-                    const thumb = document.createElement('img');
-                    thumb.src = img;
-                    thumb.alt = data.name;
-                    thumb.className = 'gallery-thumb';
-                    thumb.onerror = () => { thumb.style.display = 'none'; };
-                    thumb.onclick = () => openModal(img);
-                    galleryDiv.appendChild(thumb);
+        function buildNodes() {
+            nodes = [];
+            const count = Math.min(Math.floor((canvas.width * canvas.height) / 16000), 100);
+            for (let i = 0; i < count; i++) nodes.push(new Node());
+        }
+
+        function drawLines() {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 110) {
+                        const o = (1 - d / 110) * 0.1;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            if (mouse.x !== null) {
+                nodes.forEach(n => {
+                    const dx = n.x - mouse.x;
+                    const dy = n.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const o = (1 - d / mouse.r) * 0.2;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(n.x, n.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
                 });
             }
         }
 
-        // Modal functionality
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach(n => { n.update(); n.draw(); });
+            drawLines();
+            requestAnimationFrame(loop);
+        }
+
+        buildNodes();
+        loop();
+
+        /* ===== NAVBAR SCROLL ===== */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        /* ===== MOBILE MENU ===== */
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        /* ===== REVEAL ===== */
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('on');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => io.observe(el));
+
+        /* ===== FILTER ===== */
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+                projectCards.forEach(card => {
+                    const cats = card.dataset.category || '';
+                    if (filter === 'all' || cats.includes(filter)) {
+                        card.style.display = '';
+                        setTimeout(() => {
+                            card.classList.add('on');
+                        }, 10);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        /* ===== MODAL ===== */
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const closeBtn = document.querySelector('.modal-close');
@@ -663,14 +1049,11 @@
             modal.classList.add('active');
         }
 
-        closeBtn.onclick = () => {
-            modal.classList.remove('active');
-        };
-        modal.onclick = (e) => {
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
-        };
+        });
 
-        // Keyboard escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
                 modal.classList.remove('active');
