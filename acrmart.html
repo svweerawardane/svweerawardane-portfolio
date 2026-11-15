@@ -5,6 +5,1067 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ACR Mart | Item Management System | Shevon Weerawardane</title>
     <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e14;
+            --bg-soft: #0f141c;
+            --bg-card: #131a24;
+            --border: #1e2a3a;
+            --border-hover: #2a3f55;
+            --green: #00e5a0;
+            --green-dim: #00b37d;
+            --green-glow: rgba(0, 229, 160, 0.12);
+            --cyan: #00c8ff;
+            --amber: #f0b34a;
+            --text: #d4e0ed;
+            --text-soft: #7d8fa3;
+            --text-dim: #4a5a6a;
+            --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ===== SUBTLE BACKGROUND ===== */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-canvas canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--green-dim);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 6%;
+            background: rgba(10, 14, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+            z-index: 1000;
+            transition: all 0.35s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 14, 20, 0.92);
+            border-bottom-color: var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            border: 1.5px solid var(--green-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .logo-text {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text .dot {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-links a.active {
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--text-soft);
+            padding: 0.35rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pill .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+            animation: blink 2.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 1002;
+        }
+
+        .menu-btn span {
+            width: 22px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 7rem 6% 1.5rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 0.4rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+            border-color: rgba(0, 229, 160, 0.3);
+            background: var(--green-glow);
+            transform: translateX(-3px);
+        }
+
+        .prompt {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt .symbol {
+            color: var(--green);
+        }
+
+        .prompt .cmd {
+            color: var(--text-soft);
+        }
+
+        .prompt .cursor {
+            display: inline-block;
+            width: 7px;
+            height: 15px;
+            background: var(--green);
+            animation: cursorBlink 1.1s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .page-header h1 .accent {
+            color: var(--green);
+        }
+
+        .page-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .meta-tag {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            letter-spacing: 0.5px;
+            border: 1px solid;
+        }
+
+        .meta-tag.green {
+            color: var(--green);
+            background: rgba(0, 229, 160, 0.06);
+            border-color: rgba(0, 229, 160, 0.25);
+        }
+
+        .meta-tag.cyan {
+            color: var(--cyan);
+            background: rgba(0, 200, 255, 0.06);
+            border-color: rgba(0, 200, 255, 0.25);
+        }
+
+        .meta-tag.amber {
+            color: var(--amber);
+            background: rgba(240, 179, 74, 0.06);
+            border-color: rgba(240, 179, 74, 0.25);
+        }
+
+        /* ===== SECTION ===== */
+        .section {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 6%;
+        }
+
+        .sec-head {
+            margin-bottom: 1.6rem;
+        }
+
+        .sec-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sec-label::before {
+            content: '';
+            width: 18px;
+            height: 1px;
+            background: var(--green);
+        }
+
+        .sec-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .sec-title span {
+            color: var(--green);
+        }
+
+        /* ===== CONTENT CARD ===== */
+        .content-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green), transparent);
+        }
+
+        .content-card h2 {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-card h2:not(:first-child) {
+            margin-top: 1.6rem;
+        }
+
+        .content-card p {
+            font-size: 0.88rem;
+            color: var(--text-soft);
+            line-height: 1.8;
+            margin-bottom: 0.9rem;
+        }
+
+        .content-card p strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .content-card ul {
+            list-style: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card ul li {
+            font-size: 0.84rem;
+            color: var(--text-soft);
+            padding: 0.35rem 0 0.35rem 1.15rem;
+            position: relative;
+            line-height: 1.65;
+        }
+
+        .content-card ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--green-dim);
+            font-size: 0.85rem;
+        }
+
+        /* ===== ROLE INFO ===== */
+        .role-info {
+            background: rgba(0, 229, 160, 0.04);
+            border-left: 3px solid var(--green);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .role-info p {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .role-info p strong {
+            color: var(--green-dim);
+            font-weight: 600;
+        }
+
+        /* ===== STATUS NOTE ===== */
+        .status-note {
+            background: rgba(240, 179, 74, 0.06);
+            border-left: 3px solid var(--amber);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .status-note p {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .status-note p strong {
+            color: var(--amber);
+            font-weight: 600;
+        }
+
+        /* ===== TECH STACK ===== */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 0.3rem;
+        }
+
+        .tech-tag {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 5px;
+            letter-spacing: 0.3px;
+            background: rgba(0, 229, 160, 0.06);
+            color: var(--green-dim);
+            border: 1px solid rgba(0, 229, 160, 0.15);
+            transition: all 0.2s;
+        }
+
+        .tech-tag:hover {
+            border-color: rgba(0, 229, 160, 0.35);
+            color: var(--green);
+        }
+
+        /* ===== EVIDENCE GRID ===== */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .evidence-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .evidence-item:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .evidence-item img {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .evidence-caption {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 0.7rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 8, 12, 0.97);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 92%;
+            max-height: 88vh;
+            border-radius: 10px;
+            border: 1px solid var(--border-hover);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            font-size: 1.8rem;
+            color: var(--text-soft);
+            cursor: pointer;
+            font-family: var(--mono);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--green);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem 6%;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .footer-inner .hl {
+            color: var(--green-dim);
+        }
+
+        .footer-inner .sep {
+            color: var(--border-hover);
+            margin: 0 4px;
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .reveal.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .status-pill {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 5%;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                flex-direction: column;
+                background: rgba(10, 14, 20, 0.98);
+                backdrop-filter: blur(20px);
+                padding: 5rem 1.5rem 2rem;
+                gap: 0.4rem;
+                border-left: 1px solid var(--border);
+                transition: right 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.9rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .page-header {
+                padding-top: 6rem;
+            }
+
+            .sec-title {
+                font-size: 1.4rem;
+            }
+
+            .content-card {
+                padding: 1.4rem;
+            }
+
+            .evidence-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding-top: 5.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.7rem;
+                letter-spacing: -1px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background canvas -->
+    <div class="bg-canvas">
+        <canvas id="netCanvas"></canvas>
+    </div>
+    <div class="bg-noise"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="logo">
+            <div class="logo-mark">S</div>
+            <div class="logo-text">shevon<span class="dot">.</span>weerawardane</div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">home</a></li>
+            <li><a href="about.html">about</a></li>
+            <li><a href="projects.html" class="active">projects</a></li>
+            <li><a href="skills.html">skills</a></li>
+            <li><a href="contact.html">contact</a></li>
+        </ul>
+        <div class="nav-right">
+            <div class="status-pill">
+                <span class="dot"></span>
+                open to work
+            </div>
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <a href="projects.html" class="back-link">← back to projects</a>
+        <div class="prompt">
+            <span class="symbol">$</span>
+            <span class="cmd">cat acrmart.md</span>
+            <span class="cursor"></span>
+        </div>
+        <h1>ACR <span class="accent">Mart</span></h1>
+        <div class="page-meta">
+            <span class="meta-tag green">item management system</span>
+            <span class="meta-tag cyan">group project · PPP module @ SLIIT</span>
+            <span class="meta-tag amber">not hosted yet</span>
+        </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">overview</div>
+            <h2 class="sec-title">Project <span>Details</span></h2>
+        </div>
+
+        <div class="content-card reveal">
+            <h2>📋 Project Overview</h2>
+            <p>
+                This project was developed as a <strong>group project</strong> for the
+                <strong>PPP (Professional Practice and Portfolio)</strong> module at SLIIT City University.
+                ACR Mart is a comprehensive item management system designed for retail businesses to manage
+                products, categories, and inventory operations efficiently.
+            </p>
+
+            <div class="role-info">
+                <p><strong>👨‍💻 My Role:</strong> Full Stack Developer & Database Designer — responsible for backend development, database architecture, frontend integration, and ensuring seamless functionality across all modules.</p>
+            </div>
+
+            <div class="status-note">
+                <p><strong>⏳ Status:</strong> Not Hosted Yet — Fully developed locally with complete frontend and backend functionality. Hosting pending deployment.</p>
+            </div>
+
+            <h2>✨ Features</h2>
+            <ul>
+                <li>Item management (add, update, remove items with images)</li>
+                <li>Category management for product organization</li>
+                <li>Inventory tracking with real-time stock updates</li>
+                <li>Sales reports and analytics dashboard</li>
+                <li>User authentication with role-based access (Admin, Staff)</li>
+                <li>Responsive and clean interface for desktop & tablet</li>
+                <li>Search and filter functionality for products</li>
+            </ul>
+
+            <h2>🛠️ Technologies Used</h2>
+            <div class="tech-stack">
+                <span class="tech-tag">HTML5</span>
+                <span class="tech-tag">CSS3</span>
+                <span class="tech-tag">JavaScript</span>
+                <span class="tech-tag">PHP</span>
+                <span class="tech-tag">MySQL</span>
+                <span class="tech-tag">Bootstrap 5</span>
+                <span class="tech-tag">AJAX</span>
+                <span class="tech-tag">jQuery</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVIDENCE -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">screenshots · 3 images</div>
+            <h2 class="sec-title">Project <span>Gallery</span></h2>
+        </div>
+
+        <div class="evidence-grid">
+            <div class="evidence-item reveal">
+                <img src="acr1.png" alt="ACR Mart Dashboard Screenshot" id="screenshot1"
+                     onerror="this.src='https://placehold.co/600x400/0f141c/00e5a0?text=ACR+Mart+1'">
+                <div class="evidence-caption">// Dashboard — Inventory Overview</div>
+            </div>
+            <div class="evidence-item reveal">
+                <img src="acr2.png" alt="ACR Mart Products Management" id="screenshot2"
+                     onerror="this.src='https://placehold.co/600x400/0f141c/00e5a0?text=ACR+Mart+2'">
+                <div class="evidence-caption">// Products Management Interface</div>
+            </div>
+            <div class="evidence-item reveal">
+                <img src="acr3.png" alt="ACR Mart Reports Page" id="screenshot3"
+                     onerror="this.src='https://placehold.co/600x400/0f141c/00e5a0?text=ACR+Mart+3'">
+                <div class="evidence-caption">// Sales Reports & Analytics</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACT & TEAM -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">impact</div>
+            <h2 class="sec-title">Project <span>Summary</span></h2>
+        </div>
+
+        <div class="content-card reveal">
+            <h2>📊 Project Impact</h2>
+            <p>
+                This project demonstrates full-stack development capabilities including team collaboration,
+                database design, user authentication, inventory management logic, and responsive frontend design.
+                Successfully completed as part of academic curriculum with practical real-world retail management
+                application potential.
+            </p>
+
+            <h2>👥 Team Contribution</h2>
+            <p>
+                As the full stack developer, I designed the complete database schema, implemented all CRUD operations,
+                developed the backend logic using PHP, integrated frontend components, and ensured secure user
+                authentication. Collaborated with team members on requirements gathering and testing.
+            </p>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <div id="imageModal" class="modal">
+        <button class="modal-close" aria-label="Close">&times;</button>
+        <img id="modalImage" src="" alt="Screenshot Full Size">
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="hl">ACR Mart</span>
+            <span class="sep">|</span>
+            <span>Item Management System</span>
+            <span class="sep">|</span>
+            <span>PPP Module Group Project @ SLIIT</span>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== NETWORK CANVAS ===== */
+        const canvas = document.getElementById('netCanvas');
+        const ctx = canvas.getContext('2d');
+        let nodes = [];
+        const mouse = { x: null, y: null, r: 130 };
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', () => {
+            resize();
+            buildNodes();
+        });
+
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.r = Math.random() * 1.8 + 0.4;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.o = Math.random() * 0.4 + 0.15;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const f = (mouse.r - d) / mouse.r;
+                        this.x += (dx / d) * f * 1.8;
+                        this.y += (dy / d) * f * 1.8;
+                    }
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 229, 160, ${this.o})`;
+                ctx.fill();
+            }
+        }
+
+        function buildNodes() {
+            nodes = [];
+            const count = Math.min(Math.floor((canvas.width * canvas.height) / 16000), 100);
+            for (let i = 0; i < count; i++) nodes.push(new Node());
+        }
+
+        function drawLines() {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 110) {
+                        const o = (1 - d / 110) * 0.1;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            if (mouse.x !== null) {
+                nodes.forEach(n => {
+                    const dx = n.x - mouse.x;
+                    const dy = n.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const o = (1 - d / mouse.r) * 0.2;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(n.x, n.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach(n => { n.update(); n.draw(); });
+            drawLines();
+            requestAnimationFrame(loop);
+        }
+
+        buildNodes();
+        loop();
+
+        /* ===== NAVBAR SCROLL ===== */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        /* ===== MOBILE MENU ===== */
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        /* ===== REVEAL ===== */
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('on');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => io.observe(el));
+
+        /* ===== MODAL ===== */
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.modal-close');
+
+        function openModal(src) {
+            modalImg.src = src;
+            modal.classList.add('active');
+        }
+
+        for (let i = 1; i <= 3; i++) {
+            const shot = document.getElementById(`screenshot${i}`);
+            if (shot) {
+                shot.addEventListener('click', () => openModal(shot.src));
+            }
+        }
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ACR Mart | Item Management System | Shevon Weerawardane</title>
+    <style>
         * {
             margin: 0;
             padding: 0;
