@@ -5,471 +5,742 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Hospital Management System | Project Details | Shevon Weerawardane</title>
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
         :root {
-            --dark-deep: #0a1a2f;
-            --dark-primary: #0f2a3f;
-            --accent-blue: #1e4a76;
-            --accent-cyan: #2c7da0;
-            --light-green-mint: #d0f0e8;
-            --light-green-soft: #e2f3ef;
-            --green-accent: #2e9c7c;
-            --green-bright: #3ab795;
-            --text-light: #eaf4f0;
-            --text-dark: #0f2a2a;
+            --bg: #0a0e14;
+            --bg-soft: #0f141c;
+            --bg-card: #131a24;
+            --border: #1e2a3a;
+            --border-hover: #2a3f55;
+            --green: #00e5a0;
+            --green-dim: #00b37d;
+            --green-glow: rgba(0, 229, 160, 0.12);
+            --cyan: #00c8ff;
+            --amber: #f0b34a;
+            --text: #d4e0ed;
+            --text-soft: #7d8fa3;
+            --text-dim: #4a5a6a;
+            --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
-            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
-            color: var(--dark-deep);
-            line-height: 1.5;
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* Animated network node background */
-        body::before {
-            content: '';
+        /* ===== SUBTLE BACKGROUND ===== */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-canvas canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--green-dim);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
-            background-size: 35px 35px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f2a3f;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3ab795;
-            border-radius: 10px;
-        }
-
-        /* ===== GLASS NAVBAR ===== */
-        .navbar {
+            right: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            background: rgba(10, 26, 47, 0.75);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
+            padding: 0.9rem 6%;
+            background: rgba(10, 14, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all 0.35s ease;
         }
 
         .navbar.scrolled {
-            background: rgba(10, 26, 47, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom-color: #3ab795;
+            background: rgba(10, 14, 20, 0.92);
+            border-bottom-color: var(--border);
         }
 
-        .logo h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #b8f2e0, #3ab795);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-            font-family: 'Fira Code', monospace;
-        }
-        .logo p {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #9cd4c2;
-            letter-spacing: 1.5px;
-            margin-top: -6px;
-        }
-
-        .navbar ul {
+        .logo {
             display: flex;
-            gap: 2.2rem;
-            list-style: none;
-        }
-        .navbar ul li a {
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #d0f0e8;
-            transition: 0.25s ease;
-            position: relative;
-            padding: 0.5rem 0;
-            font-family: 'Fira Code', monospace;
-        }
-        .navbar ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: linear-gradient(90deg, #3ab795, #2e9c7c);
-            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .navbar ul li a:hover::after,
-        .navbar ul li a.active::after {
-            width: 100%;
-        }
-        .navbar ul li a.active {
-            color: #b8f2e0;
-            font-weight: 700;
-        }
-        .navbar ul li a:hover {
-            color: #c8ffe6;
         }
 
-        .menu-toggle {
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            border: 1.5px solid var(--green-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .logo-text {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text .dot {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-links a.active {
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--text-soft);
+            padding: 0.35rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pill .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+            animation: blink 2.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        .menu-btn {
             display: none;
             flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
             cursor: pointer;
-            gap: 5px;
-        }
-        .menu-toggle span {
-            width: 28px;
-            height: 3px;
-            background: #3ab795;
-            border-radius: 3px;
+            padding: 6px;
+            z-index: 1002;
         }
 
-        /* ===== PROJECT HERO SECTION ===== */
-        .project-hero {
-            max-width: 1280px;
-            margin: 2rem auto 2rem;
-            padding: 2rem 5%;
+        .menu-btn span {
+            width: 22px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
             position: relative;
             z-index: 2;
-            text-align: center;
-        }
-
-        .project-hero-text h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-        }
-
-        .project-badge {
-            display: inline-block;
-            background: #3ab795;
-            color: #0a1a2f;
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            font-family: 'Fira Code', monospace;
-            margin-bottom: 1rem;
-        }
-
-        .project-hero-text p {
-            font-size: 1.2rem;
-            color: #0f2a3f;
-            max-width: 800px;
+            max-width: 1300px;
             margin: 0 auto;
-            background: rgba(208, 240, 232, 0.4);
-            padding: 1rem;
-            border-radius: 20px;
-            border-left: 4px solid #3ab795;
+            padding: 7rem 6% 1.5rem;
         }
 
-        /* ===== PROJECT DETAILS SECTION ===== */
-        .project-details {
-            max-width: 1280px;
-            margin: 1rem auto 2rem;
-            padding: 0 5%;
-            position: relative;
-            z-index: 2;
-        }
-
-        .project-content {
-            background: rgba(10, 26, 47, 0.65);
-            backdrop-filter: blur(10px);
-            border-radius: 32px;
-            padding: 2rem;
-            border: 1px solid rgba(58, 183, 149, 0.4);
-        }
-
-        .project-content h2 {
-            font-size: 1.8rem;
-            color: #b8f2e0;
-            margin: 1.5rem 0 1rem;
-            font-family: 'Fira Code', monospace;
-            border-left: 4px solid #3ab795;
-            padding-left: 1rem;
-        }
-
-        .project-content h2:first-of-type {
-            margin-top: 0;
-        }
-
-        .project-content p {
-            color: #d0f0e8;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .project-content ul {
-            list-style: none;
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 0.4rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
             margin-bottom: 1.5rem;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
         }
 
-        .project-content ul li {
-            color: #d0f0e8;
-            padding: 0.4rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            font-size: 0.95rem;
+        .back-link:hover {
+            color: var(--green);
+            border-color: rgba(0, 229, 160, 0.3);
+            background: var(--green-glow);
+            transform: translateX(-3px);
         }
 
-        .project-content ul li::before {
-            content: '▹';
-            position: absolute;
-            left: 0;
-            color: #3ab795;
+        .prompt {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Tech Stack */
-        .tech-stack {
+        .prompt .symbol {
+            color: var(--green);
+        }
+
+        .prompt .cmd {
+            color: var(--text-soft);
+        }
+
+        .prompt .cursor {
+            display: inline-block;
+            width: 7px;
+            height: 15px;
+            background: var(--green);
+            animation: cursorBlink 1.1s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .page-header h1 .accent {
+            color: var(--green);
+        }
+
+        .page-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 0.6rem;
-            margin: 1rem 0 1.5rem;
-        }
-        .tech-tag {
-            background: rgba(58, 183, 149, 0.2);
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            color: #b8f2e0;
-            font-family: monospace;
-            border: 1px solid rgba(58, 183, 149, 0.4);
+            margin-top: 1rem;
+            align-items: center;
         }
 
-        /* Evidence Section */
-        .project-evidence {
-            margin: 1.5rem 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 24px;
-            padding: 1rem;
-            text-align: center;
-        }
-        .project-evidence img {
-            max-width: 100%;
-            border-radius: 20px;
-            border: 2px solid rgba(58, 183, 149, 0.5);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .project-evidence img:hover {
-            border-color: #3ab795;
-            transform: scale(1.01);
-        }
-        .evidence-caption {
-            margin-top: 0.8rem;
-            color: #9cd4c2;
-            font-size: 0.8rem;
-            font-family: monospace;
+        .meta-tag {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            letter-spacing: 0.5px;
+            border: 1px solid;
         }
 
-        /* Role Info Card */
-        .role-info {
-            background: rgba(58, 183, 149, 0.1);
-            border-radius: 20px;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-left: 3px solid #3ab795;
-        }
-        .role-info p {
-            margin: 0;
-            font-size: 0.9rem;
+        .meta-tag.green {
+            color: var(--green);
+            background: rgba(0, 229, 160, 0.06);
+            border-color: rgba(0, 229, 160, 0.25);
         }
 
-        /* Back Button */
-        .back-btn-container {
-            text-align: center;
-            margin: 2rem auto 4rem;
+        .meta-tag.cyan {
+            color: var(--cyan);
+            background: rgba(0, 200, 255, 0.06);
+            border-color: rgba(0, 200, 255, 0.25);
+        }
+
+        /* ===== SECTION ===== */
+        .section {
             position: relative;
             z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 6%;
         }
 
-        .btn {
-            display: inline-block;
-            background: linear-gradient(95deg, #0f2a3f, #1b4e5e);
-            color: white;
-            padding: 0.8rem 2rem;
-            border-radius: 48px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
+        .sec-head {
+            margin-bottom: 1.6rem;
+        }
+
+        .sec-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sec-label::before {
+            content: '';
+            width: 18px;
+            height: 1px;
+            background: var(--green);
+        }
+
+        .sec-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .sec-title span {
+            color: var(--green);
+        }
+
+        /* ===== CONTENT CARD ===== */
+        .content-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 15px -8px rgba(58, 183, 149, 0.4);
-            border: 1px solid rgba(58, 183, 149, 0.6);
-            font-family: 'Fira Code', monospace;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 20px -10px #3ab795;
-            background: linear-gradient(95deg, #1a4a5e, #0f2a3f);
-            border-color: #8eddc2;
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green), transparent);
         }
 
-        /* Modal for fullscreen image */
+        .content-card h2 {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-card h2:not(:first-child) {
+            margin-top: 1.6rem;
+        }
+
+        .content-card p {
+            font-size: 0.88rem;
+            color: var(--text-soft);
+            line-height: 1.8;
+            margin-bottom: 0.9rem;
+        }
+
+        .content-card p strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .content-card ul {
+            list-style: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card ul li {
+            font-size: 0.84rem;
+            color: var(--text-soft);
+            padding: 0.35rem 0 0.35rem 1.15rem;
+            position: relative;
+            line-height: 1.65;
+        }
+
+        .content-card ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--green-dim);
+            font-size: 0.85rem;
+        }
+
+        /* ===== ROLE INFO ===== */
+        .role-info {
+            background: rgba(0, 229, 160, 0.04);
+            border-left: 3px solid var(--green);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .role-info p {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .role-info p strong {
+            color: var(--green-dim);
+            font-weight: 600;
+        }
+
+        /* ===== TECH STACK ===== */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 0.3rem;
+        }
+
+        .tech-tag {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 5px;
+            letter-spacing: 0.3px;
+            background: rgba(0, 229, 160, 0.06);
+            color: var(--green-dim);
+            border: 1px solid rgba(0, 229, 160, 0.15);
+            transition: all 0.2s;
+        }
+
+        .tech-tag:hover {
+            border-color: rgba(0, 229, 160, 0.35);
+            color: var(--green);
+        }
+
+        /* ===== SCREENSHOT ===== */
+        .screenshot-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .screenshot-wrap:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+        }
+
+        .screenshot-wrap img {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .screenshot-caption {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 0.7rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 26, 47, 0.96);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
+            inset: 0;
+            background: rgba(5, 8, 12, 0.97);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
             justify-content: center;
             align-items: center;
             cursor: pointer;
         }
+
         .modal.active {
             display: flex;
         }
+
         .modal img {
-            max-width: 90%;
-            max-height: 85%;
-            border-radius: 20px;
-            border: 3px solid #3ab795;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            max-width: 92%;
+            max-height: 88vh;
+            border-radius: 10px;
+            border: 1px solid var(--border-hover);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
+
         .modal-close {
             position: absolute;
             top: 20px;
-            right: 35px;
-            font-size: 2.5rem;
-            color: #3ab795;
+            right: 28px;
+            font-size: 1.8rem;
+            color: var(--text-soft);
             cursor: pointer;
-            font-family: monospace;
-            transition: 0.2s;
+            font-family: var(--mono);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            line-height: 1;
         }
+
         .modal-close:hover {
-            color: #8eddc2;
-            transform: scale(1.1);
+            color: var(--green);
         }
 
-        /* Footer */
-        .footer-note {
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            margin: 2rem auto 2rem;
-            font-size: 0.85rem;
-            color: #0a1a2f;
-            font-family: 'Fira Code', monospace;
-        }
-        .footer-note span {
-            background: #0f2a3f;
-            padding: 0.4rem 1.5rem;
-            border-radius: 40px;
-            display: inline-block;
-            border: 1px solid #3ab795;
-            color: #b8f2e0;
-            backdrop-filter: blur(4px);
+            padding: 2rem 6%;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
         }
 
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
+        .footer-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
         }
-        .project-hero, .project-details, .back-btn-container {
-            animation: fadeUp 0.6s ease forwards;
+
+        .footer-inner .hl {
+            color: var(--green-dim);
+        }
+
+        .footer-inner .sep {
+            color: var(--border-hover);
+            margin: 0 4px;
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal {
             opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
         }
-        .project-hero { animation-delay: 0s; animation-fill-mode: forwards; }
-        .project-details { animation-delay: 0.1s; animation-fill-mode: forwards; }
-        .back-btn-container { animation-delay: 0.2s; animation-fill-mode: forwards; }
 
-        @media (max-width: 850px) {
-            .project-hero-text h1 { font-size: 2.5rem; }
-            .project-content h2 { font-size: 1.4rem; }
-            .navbar ul {
-                gap: 1rem;
-                background: rgba(10, 26, 47, 0.96);
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                flex-direction: column;
-                padding: 1.5rem;
-                text-align: center;
-                backdrop-filter: blur(20px);
-                transform: scaleY(0);
-                transform-origin: top;
-                transition: 0.3s;
-                opacity: 0;
-                pointer-events: none;
-                border-radius: 0 0 24px 24px;
+        .reveal.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .status-pill {
+                display: none;
             }
-            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
-            .menu-toggle { display: flex; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 5%;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                flex-direction: column;
+                background: rgba(10, 14, 20, 0.98);
+                backdrop-filter: blur(20px);
+                padding: 5rem 1.5rem 2rem;
+                gap: 0.4rem;
+                border-left: 1px solid var(--border);
+                transition: right 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.9rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .page-header {
+                padding-top: 6rem;
+            }
+
+            .sec-title {
+                font-size: 1.4rem;
+            }
+
+            .content-card {
+                padding: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding-top: 5.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.7rem;
+                letter-spacing: -1px;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- Background canvas -->
+    <div class="bg-canvas">
+        <canvas id="netCanvas"></canvas>
+    </div>
+    <div class="bg-noise"></div>
+
+    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
-        <div class="logo">
-            <h2>Shevon</h2>
-            <p>NETWORK & SOFTWARE</p>
-        </div>
-        <ul id="navLinks">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="projects.html" class="active">Projects</a></li>
-            <li><a href="skills.html">Skills</a></li>
-            <li><a href="contact.html">Contact</a></li>
+        <a href="index.html" class="logo">
+            <div class="logo-mark">S</div>
+            <div class="logo-text">shevon<span class="dot">.</span>weerawardane</div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">home</a></li>
+            <li><a href="about.html">about</a></li>
+            <li><a href="projects.html" class="active">projects</a></li>
+            <li><a href="skills.html">skills</a></li>
+            <li><a href="contact.html">contact</a></li>
         </ul>
-        <div class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="nav-right">
+            <div class="status-pill">
+                <span class="dot"></span>
+                open to work
+            </div>
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <!-- PROJECT HERO SECTION -->
-    <section class="project-hero">
-        <div class="project-hero-text">
-            <span class="project-badge">Completed Assignment | Database & System Design</span>
-            <h1>🏥 Hospital Management System</h1>
-            <p>This system manages patient records efficiently, allowing adding, updating, and tracking patient information in a hospital environment.</p>
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <a href="projects.html" class="back-link">← back to projects</a>
+        <div class="prompt">
+            <span class="symbol">$</span>
+            <span class="cmd">cat hospital.md</span>
+            <span class="cursor"></span>
+        </div>
+        <h1>Hospital <span class="accent">Management</span></h1>
+        <div class="page-meta">
+            <span class="meta-tag green">patient record management</span>
+            <span class="meta-tag cyan">group project · database & system design @ SLIIT</span>
         </div>
     </section>
 
-    <!-- PROJECT DETAILS -->
-    <section class="project-details">
-        <div class="project-content">
+    <!-- OVERVIEW -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">overview</div>
+            <h2 class="sec-title">Project <span>Details</span></h2>
+        </div>
+
+        <div class="content-card reveal">
             <h2>📋 Project Overview</h2>
-            <p>This project was developed as a <strong>group project</strong> for the <strong>Database Management & System Design</strong> module at SLIIT City University. The Hospital Management System streamlines patient record management, appointment scheduling, and administrative tasks for healthcare facilities.</p>
+            <p>
+                This project was developed as a <strong>group project</strong> for the
+                <strong>Database Management & System Design</strong> module at SLIIT City University.
+                The Hospital Management System streamlines patient record management, appointment scheduling,
+                and administrative tasks for healthcare facilities.
+            </p>
 
             <div class="role-info">
                 <p><strong>👨‍💻 My Role:</strong> System & Backend Developer — responsible for database schema design, PHP backend logic, patient record CRUD operations, search/filter functionality, and system architecture.</p>
@@ -490,95 +761,243 @@
             <div class="tech-stack">
                 <span class="tech-tag">PHP</span>
                 <span class="tech-tag">MySQL</span>
-                <span class="tech-tag">Java (Desktop Version)</span>
-                <span class="tech-tag">HTML5/CSS3</span>
+                <span class="tech-tag">Java (Desktop)</span>
+                <span class="tech-tag">HTML5 / CSS3</span>
                 <span class="tech-tag">JavaScript</span>
                 <span class="tech-tag">Bootstrap</span>
                 <span class="tech-tag">AJAX</span>
             </div>
-
-            <h2>📸 Evidence / Screenshot</h2>
-            <div class="project-evidence">
-                <img src="hospital.png" alt="Hospital Management System Screenshot" id="screenshotImg" onerror="this.src='https://placehold.co/800x500/0f2a3f/3ab795?text=Hospital+Management+System+Screenshot'">
-                <div class="evidence-caption">📸 Patient Records Dashboard - Main Interface (Click to enlarge)</div>
-            </div>
-
-            <h2>📊 Project Impact</h2>
-            <p>This project demonstrates comprehensive database design and full-stack development capabilities including complex SQL queries, user authentication, role-based access control, and responsive frontend design. The system is designed to handle real-world hospital administrative needs efficiently.</p>
-            
-            <h2>👥 Team Contribution</h2>
-            <p>As the system and backend developer, I designed the complete database schema with proper normalization, implemented all CRUD operations for patient records, developed search and filter functionality, integrated frontend components, and ensured data integrity across all modules. Collaborated with team members on requirements gathering, testing, and documentation.</p>
         </div>
     </section>
 
-    <!-- BACK BUTTON -->
-    <div class="back-btn-container">
-        <a href="projects.html" class="btn">← Back to Projects</a>
-    </div>
+    <!-- SCREENSHOT -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">evidence</div>
+            <h2 class="sec-title">Project <span>Screenshot</span></h2>
+        </div>
 
-    <!-- Modal for fullscreen image -->
+        <div class="screenshot-wrap reveal" id="screenshotWrap">
+            <img src="hospital.png" alt="Hospital Management System Screenshot" id="screenshotImg"
+                 onerror="this.src='https://placehold.co/800x500/0f141c/00e5a0?text=Hospital+Management+Screenshot'">
+            <div class="screenshot-caption">// Patient Records Dashboard — Main Interface · click to enlarge</div>
+        </div>
+    </section>
+
+    <!-- IMPACT & TEAM -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">impact</div>
+            <h2 class="sec-title">Project <span>Summary</span></h2>
+        </div>
+
+        <div class="content-card reveal">
+            <h2>📊 Project Impact</h2>
+            <p>
+                This project demonstrates comprehensive database design and full-stack development capabilities
+                including complex SQL queries, user authentication, role-based access control, and responsive
+                frontend design. The system is designed to handle real-world hospital administrative needs efficiently.
+            </p>
+
+            <h2>👥 Team Contribution</h2>
+            <p>
+                As the system and backend developer, I designed the complete database schema with proper normalization,
+                implemented all CRUD operations for patient records, developed search and filter functionality,
+                integrated frontend components, and ensured data integrity across all modules. Collaborated with
+                team members on requirements gathering, testing, and documentation.
+            </p>
+        </div>
+    </section>
+
+    <!-- MODAL -->
     <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
+        <button class="modal-close" aria-label="Close">&times;</button>
         <img id="modalImage" src="" alt="Screenshot Full Size">
     </div>
 
-    <div class="footer-note">
-        <span>🏥 Hospital Management System | Database & System Design Project @ SLIIT</span>
-    </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="hl">Hospital Management System</span>
+            <span class="sep">|</span>
+            <span>Patient Record Management</span>
+            <span class="sep">|</span>
+            <span>Database & System Design Project @ SLIIT</span>
+        </div>
+    </footer>
 
     <script>
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        const navbar = document.getElementById('navbar');
+        /* ===== NETWORK CANVAS ===== */
+        const canvas = document.getElementById('netCanvas');
+        const ctx = canvas.getContext('2d');
+        let nodes = [];
+        const mouse = { x: null, y: null, r: 130 };
 
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', () => {
+            resize();
+            buildNodes();
+        });
+
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.r = Math.random() * 1.8 + 0.4;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.o = Math.random() * 0.4 + 0.15;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const f = (mouse.r - d) / mouse.r;
+                        this.x += (dx / d) * f * 1.8;
+                        this.y += (dy / d) * f * 1.8;
+                    }
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 229, 160, ${this.o})`;
+                ctx.fill();
+            }
         }
 
-        document.querySelectorAll('.navbar ul li a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+        function buildNodes() {
+            nodes = [];
+            const count = Math.min(Math.floor((canvas.width * canvas.height) / 16000), 100);
+            for (let i = 0; i < count; i++) nodes.push(new Node());
+        }
+
+        function drawLines() {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 110) {
+                        const o = (1 - d / 110) * 0.1;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            if (mouse.x !== null) {
+                nodes.forEach(n => {
+                    const dx = n.x - mouse.x;
+                    const dy = n.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const o = (1 - d / mouse.r) * 0.2;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(n.x, n.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach(n => { n.update(); n.draw(); });
+            drawLines();
+            requestAnimationFrame(loop);
+        }
+
+        buildNodes();
+        loop();
+
+        /* ===== NAVBAR SCROLL ===== */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        /* ===== MOBILE MENU ===== */
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
             });
         });
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) navbar.classList.add('scrolled');
-            else navbar.classList.remove('scrolled');
-        });
+        /* ===== REVEAL ===== */
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('on');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => io.observe(el));
 
-        // Modal functionality for screenshot
+        /* ===== MODAL ===== */
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const closeBtn = document.querySelector('.modal-close');
+        const screenshotWrap = document.getElementById('screenshotWrap');
         const screenshotImg = document.getElementById('screenshotImg');
 
-        if (screenshotImg) {
-            screenshotImg.addEventListener('click', () => {
+        if (screenshotWrap) {
+            screenshotWrap.addEventListener('click', () => {
                 modalImg.src = screenshotImg.src;
                 modal.classList.add('active');
             });
         }
 
-        closeBtn.onclick = () => {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             modal.classList.remove('active');
-        };
+        });
 
-        modal.onclick = (e) => {
+        modal.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
-        };
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
                 modal.classList.remove('active');
             }
         });
-
-        console.log('🏥 Hospital Management System Project Page Loaded');
-        console.log('Project: Patient Record Management | Database & System Design Module | SLIIT City University');
-        console.log('Role: System & Backend Developer');
     </script>
 </body>
 </html>
