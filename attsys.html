@@ -5,701 +5,1213 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AttSys | QR Attendance System | Shevon Weerawardane</title>
     <style>
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* ===== THEME: Light Green + Dark Blue (Network/Software Engineer Vibe) ===== */
         :root {
-            --dark-deep: #0a1a2f;
-            --dark-primary: #0f2a3f;
-            --accent-blue: #1e4a76;
-            --accent-cyan: #2c7da0;
-            --light-green-mint: #d0f0e8;
-            --light-green-soft: #e2f3ef;
-            --green-accent: #2e9c7c;
-            --green-bright: #3ab795;
-            --text-light: #eaf4f0;
-            --text-dark: #0f2a2a;
+            --bg: #0a0e14;
+            --bg-soft: #0f141c;
+            --bg-card: #131a24;
+            --border: #1e2a3a;
+            --border-hover: #2a3f55;
+            --green: #00e5a0;
+            --green-dim: #00b37d;
+            --green-glow: rgba(0, 229, 160, 0.12);
+            --cyan: #00c8ff;
+            --amber: #f0b34a;
+            --text: #d4e0ed;
+            --text-soft: #7d8fa3;
+            --text-dim: #4a5a6a;
+            --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', 'SF Mono', 'Fira Code', monospace, system-ui;
-            background: linear-gradient(135deg, #eafaf5 0%, #c8e6df 50%, #b8dfd4 100%);
-            color: var(--dark-deep);
-            line-height: 1.5;
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* Animated network node background */
-        body::before {
-            content: '';
+        /* ===== SUBTLE BACKGROUND ===== */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-canvas canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--green-dim);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle at 20% 40%, rgba(46, 156, 124, 0.08) 1px, transparent 1px);
-            background-size: 35px 35px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f2a3f;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3ab795;
-            border-radius: 10px;
-        }
-
-        /* ===== GLASS NAVBAR ===== */
-        .navbar {
+            right: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            background: rgba(10, 26, 47, 0.75);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(58, 183, 149, 0.3);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
+            padding: 0.9rem 6%;
+            background: rgba(10, 14, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all 0.35s ease;
         }
 
         .navbar.scrolled {
-            background: rgba(10, 26, 47, 0.92);
-            backdrop-filter: blur(16px);
-            border-bottom-color: #3ab795;
+            background: rgba(10, 14, 20, 0.92);
+            border-bottom-color: var(--border);
         }
 
-        .logo h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #b8f2e0, #3ab795);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-            font-family: 'Fira Code', monospace;
-        }
-        .logo p {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #9cd4c2;
-            letter-spacing: 1.5px;
-            margin-top: -6px;
-        }
-
-        .navbar ul {
+        .logo {
             display: flex;
-            gap: 2.2rem;
-            list-style: none;
-        }
-        .navbar ul li a {
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #d0f0e8;
-            transition: 0.25s ease;
-            position: relative;
-            padding: 0.5rem 0;
-            font-family: 'Fira Code', monospace;
-        }
-        .navbar ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: linear-gradient(90deg, #3ab795, #2e9c7c);
-            transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .navbar ul li a:hover::after,
-        .navbar ul li a.active::after {
-            width: 100%;
-        }
-        .navbar ul li a.active {
-            color: #b8f2e0;
-            font-weight: 700;
-        }
-        .navbar ul li a:hover {
-            color: #c8ffe6;
         }
 
-        .menu-toggle {
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            border: 1.5px solid var(--green-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .logo-text {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text .dot {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            color: var(--text-soft);
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-links a.active {
+            color: var(--green);
+            background: var(--green-glow);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--text-soft);
+            padding: 0.35rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pill .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+            animation: blink 2.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        .menu-btn {
             display: none;
             flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
             cursor: pointer;
-            gap: 5px;
-        }
-        .menu-toggle span {
-            width: 28px;
-            height: 3px;
-            background: #3ab795;
-            border-radius: 3px;
+            padding: 6px;
+            z-index: 1002;
         }
 
-        /* ===== PROJECT DETAIL SECTION ===== */
-        .project-detail {
-            max-width: 1280px;
-            margin: 2rem auto 4rem;
-            padding: 2rem 5%;
+        .menu-btn span {
+            width: 22px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+        .menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
             position: relative;
             z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 7rem 6% 1.5rem;
         }
 
         .back-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            color: #3ab795;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-soft);
             text-decoration: none;
-            font-family: 'Fira Code', monospace;
-            margin-bottom: 2rem;
-            transition: all 0.3s;
+            padding: 0.4rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
         }
+
         .back-link:hover {
-            transform: translateX(-5px);
-            color: #8eddc2;
+            color: var(--green);
+            border-color: rgba(0, 229, 160, 0.3);
+            background: var(--green-glow);
+            transform: translateX(-3px);
         }
 
-        .project-header {
-            margin-bottom: 2rem;
-        }
-
-        .project-header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #0a1a2f, #1a5d6e, #3ab795);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
-            letter-spacing: -1px;
-        }
-
-        .project-badge {
-            display: inline-block;
-            background: #3ab795;
-            color: #0a1a2f;
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
+        .prompt {
+            font-family: var(--mono);
             font-size: 0.8rem;
-            font-weight: 700;
-            font-family: 'Fira Code', monospace;
-            margin-top: 0.5rem;
+            color: var(--text-dim);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt .symbol {
+            color: var(--green);
+        }
+
+        .prompt .cmd {
+            color: var(--text-soft);
+        }
+
+        .prompt .cursor {
+            display: inline-block;
+            width: 7px;
+            height: 15px;
+            background: var(--green);
+            animation: cursorBlink 1.1s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .page-header h1 .accent {
+            color: var(--green);
+        }
+
+        .page-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .meta-tag {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            letter-spacing: 0.5px;
+            border: 1px solid;
+        }
+
+        .meta-tag.green {
+            color: var(--green);
+            background: rgba(0, 229, 160, 0.06);
+            border-color: rgba(0, 229, 160, 0.25);
+        }
+
+        .meta-tag.cyan {
+            color: var(--cyan);
+            background: rgba(0, 200, 255, 0.06);
+            border-color: rgba(0, 200, 255, 0.25);
+        }
+
+        .meta-tag.amber {
+            color: var(--amber);
+            background: rgba(240, 179, 74, 0.06);
+            border-color: rgba(240, 179, 74, 0.25);
         }
 
         .live-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(58, 183, 149, 0.2);
-            padding: 0.4rem 1rem;
-            border-radius: 40px;
-            margin-left: 1rem;
-            font-size: 0.8rem;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--green);
             text-decoration: none;
-            color: #b8f2e0;
-            border: 1px solid #3ab795;
-            transition: all 0.3s;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid rgba(0, 229, 160, 0.3);
+            border-radius: 5px;
+            background: var(--green-glow);
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
         }
+
         .live-link:hover {
-            background: #3ab795;
-            color: #0a1a2f;
+            background: var(--green);
+            color: var(--bg);
+            border-color: var(--green);
         }
 
-        .project-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+        /* ===== SECTION ===== */
+        .section {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 6%;
         }
 
-        /* Achievement Banner */
-        .achievement-banner {
-            background: linear-gradient(135deg, rgba(58, 183, 149, 0.25), rgba(10, 26, 47, 0.6));
-            border: 1px solid #3ab795;
-            border-radius: 20px;
-            padding: 1rem 1.5rem;
+        .sec-head {
+            margin-bottom: 1.6rem;
+        }
+
+        .sec-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            backdrop-filter: blur(4px);
-        }
-        .achievement-icon {
-            font-size: 2rem;
-        }
-        .achievement-text {
-            flex: 1;
-        }
-        .achievement-text h4 {
-            color: #b8f2e0;
-            font-size: 1rem;
-            margin-bottom: 0.2rem;
-            font-family: 'Fira Code', monospace;
-        }
-        .achievement-text p {
-            color: #d0f0e8;
-            font-size: 0.9rem;
-        }
-        .achievement-highlight {
-            background: #3ab795;
-            color: #0a1a2f;
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-weight: bold;
-            font-family: monospace;
-            white-space: nowrap;
+            gap: 8px;
         }
 
-        /* Info Cards */
+        .sec-label::before {
+            content: '';
+            width: 18px;
+            height: 1px;
+            background: var(--green);
+        }
+
+        .sec-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .sec-title span {
+            color: var(--green);
+        }
+
+        /* ===== ACHIEVEMENT BANNER ===== */
+        .achievement {
+            background: var(--bg-soft);
+            border: 1px solid rgba(0, 229, 160, 0.3);
+            border-radius: 14px;
+            padding: 1.4rem 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green), var(--cyan));
+        }
+
+        .ach-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--green-glow);
+            border: 1px solid rgba(0, 229, 160, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .ach-text {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .ach-text h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .ach-text p {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        .ach-badge {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            background: var(--green);
+            color: var(--bg);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ===== INFO GRID ===== */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1rem;
+            gap: 1.2rem;
         }
 
         .info-card {
-            background: rgba(10, 26, 47, 0.65);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 1.5rem;
-            border: 1px solid rgba(58, 183, 149, 0.4);
-            transition: all 0.3s;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.6rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--green), transparent);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+
+        .info-card:hover::before {
+            opacity: 1;
+        }
+
         .info-card:hover {
-            border-color: #3ab795;
+            border-color: var(--border-hover);
             transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+            background: var(--bg-card);
         }
+
         .info-card h3 {
-            color: #b8f2e0;
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-            font-family: 'Fira Code', monospace;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .info-card p, .info-card ul {
-            color: #d0f0e8;
-            font-size: 0.9rem;
+
+        .info-card p {
+            font-size: 0.85rem;
+            color: var(--text-soft);
+            line-height: 1.75;
         }
+
+        .info-card p strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
         .info-card ul {
             list-style: none;
-            padding-left: 0;
         }
+
         .info-card ul li {
-            padding: 0.3rem 0;
-            padding-left: 1.2rem;
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            padding: 0.3rem 0 0.3rem 1.15rem;
             position: relative;
+            line-height: 1.6;
         }
+
         .info-card ul li::before {
             content: '▹';
             position: absolute;
             left: 0;
-            color: #3ab795;
-        }
-
-        /* Special Feature Box */
-        .feature-box {
-            background: rgba(46, 156, 124, 0.15);
-            border-left: 4px solid #3ab795;
-            padding: 1rem;
-            border-radius: 16px;
-            margin-top: 0.5rem;
-        }
-        .feature-box p {
-            color: #041c2e;
+            color: var(--green-dim);
             font-size: 0.85rem;
-            font-family: monospace;
         }
 
-        /* Tech Stack Tags */
+        .info-card ul li strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* ===== FEATURE BOX ===== */
+        .feature-box {
+            background: var(--bg-soft);
+            border-left: 3px solid var(--green);
+            border-radius: 0 10px 10px 0;
+            padding: 1.2rem 1.4rem;
+            margin-top: 1rem;
+        }
+
+        .feature-box p {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            line-height: 1.7;
+        }
+
+        .feature-box p strong {
+            color: var(--green-dim);
+            font-weight: 600;
+        }
+
+        /* ===== SOLO NOTE ===== */
+        .solo-note {
+            background: rgba(0, 229, 160, 0.04);
+            border: 1px dashed rgba(0, 229, 160, 0.25);
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            margin-top: 1.2rem;
+        }
+
+        .solo-note p {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            line-height: 1.7;
+        }
+
+        .solo-note p strong {
+            color: var(--green-dim);
+            font-weight: 600;
+        }
+
+        /* ===== TECH STACK ===== */
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.6rem;
-            margin-top: 0.8rem;
+            gap: 0.55rem;
         }
+
         .tech-tag {
-            background: rgba(58, 183, 149, 0.2);
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: #b8f2e0;
-            font-family: monospace;
-            border: 1px solid rgba(58, 183, 149, 0.4);
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 5px;
+            letter-spacing: 0.3px;
+            background: rgba(0, 229, 160, 0.06);
+            color: var(--green-dim);
+            border: 1px solid rgba(0, 229, 160, 0.15);
+            transition: all 0.2s;
         }
 
-        /* Solo Developer Note */
-        .solo-dev-note {
-            background: rgba(10, 26, 47, 0.5);
-            border-radius: 20px;
-            padding: 1rem;
-            text-align: center;
-            border: 1px dashed #3ab795;
-        }
-        .solo-dev-note p {
-            color: #9cd4c2;
-            font-size: 0.85rem;
+        .tech-tag:hover {
+            border-color: rgba(0, 229, 160, 0.35);
+            color: var(--green);
         }
 
-        /* Image Gallery */
-        .gallery-section {
-            background: rgba(10, 26, 47, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 32px;
-            padding: 1.5rem;
-            border: 1px solid rgba(58, 183, 149, 0.3);
-        }
-        .gallery-section h2 {
-            color: #b8f2e0;
-            font-size: 1.5rem;
-            margin-bottom: 1.2rem;
-            font-family: 'Fira Code', monospace;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        /* ===== GALLERY ===== */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.2rem;
+            gap: 1rem;
         }
+
         .gallery-item {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        .gallery-item:hover {
-            transform: scale(1.02);
-            border-color: #3ab795;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            display: block;
-        }
-        .gallery-caption {
-            padding: 0.6rem;
-            text-align: center;
-            color: #9cd4c2;
-            font-size: 0.75rem;
-            font-family: monospace;
-            background: rgba(10, 26, 47, 0.7);
         }
 
-        /* Modal for fullscreen image */
+        .gallery-item:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-item:hover img {
+            opacity: 0.85;
+        }
+
+        .gallery-caption {
+            padding: 0.7rem 1rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-soft);
+            border-top: 1px solid var(--border);
+            line-height: 1.5;
+        }
+
+        .gallery-hint {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-align: center;
+            margin-top: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 26, 47, 0.96);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
+            inset: 0;
+            background: rgba(5, 8, 12, 0.97);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
             justify-content: center;
             align-items: center;
             cursor: pointer;
         }
+
         .modal.active {
             display: flex;
         }
+
         .modal img {
-            max-width: 90%;
-            max-height: 85%;
-            border-radius: 20px;
-            border: 3px solid #3ab795;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            max-width: 92%;
+            max-height: 88vh;
+            border-radius: 10px;
+            border: 1px solid var(--border-hover);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
+
         .modal-close {
             position: absolute;
             top: 20px;
-            right: 35px;
-            font-size: 2.5rem;
-            color: #3ab795;
+            right: 28px;
+            font-size: 1.8rem;
+            color: var(--text-soft);
             cursor: pointer;
-            font-family: monospace;
-            transition: 0.2s;
+            font-family: var(--mono);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            line-height: 1;
         }
+
         .modal-close:hover {
-            color: #8eddc2;
-            transform: scale(1.1);
+            color: var(--green);
         }
 
-        /* Footer */
-        .footer-note {
+        /* ===== FOOTER ===== */
+        .footer {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            margin: 2rem auto 2rem;
-            font-size: 0.85rem;
-            color: #0a1a2f;
-            font-family: 'Fira Code', monospace;
-        }
-        .footer-note span {
-            background: #0f2a3f;
-            padding: 0.4rem 1.5rem;
-            border-radius: 40px;
-            display: inline-block;
-            border: 1px solid #3ab795;
-            color: #b8f2e0;
-            backdrop-filter: blur(4px);
+            padding: 2rem 6%;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
         }
 
-        /* Animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
+        .footer-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text-dim);
         }
-        .project-detail > * {
-            animation: fadeUp 0.6s ease forwards;
+
+        .footer-inner .hl {
+            color: var(--green-dim);
+        }
+
+        .footer-inner .sep {
+            color: var(--border-hover);
+            margin: 0 4px;
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal {
             opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
         }
-        .back-link { animation-delay: 0s; animation-fill-mode: forwards; }
-        .project-header { animation-delay: 0.1s; animation-fill-mode: forwards; }
-        .achievement-banner { animation-delay: 0.15s; animation-fill-mode: forwards; }
-        .info-grid { animation-delay: 0.2s; animation-fill-mode: forwards; }
-        .gallery-section { animation-delay: 0.3s; animation-fill-mode: forwards; }
 
-        @media (max-width: 850px) {
-            .project-header h1 { font-size: 2rem; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            .navbar ul {
-                gap: 1rem;
-                background: rgba(10, 26, 47, 0.96);
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                flex-direction: column;
-                padding: 1.5rem;
-                text-align: center;
-                backdrop-filter: blur(20px);
-                transform: scaleY(0);
-                transform-origin: top;
-                transition: 0.3s;
-                opacity: 0;
-                pointer-events: none;
-                border-radius: 0 0 24px 24px;
+        .reveal.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .status-pill {
+                display: none;
             }
-            .navbar ul.active { transform: scaleY(1); opacity: 1; pointer-events: auto; }
-            .menu-toggle { display: flex; }
-            .live-link { margin-left: 0; margin-top: 0.5rem; display: inline-block; }
-            .achievement-highlight { white-space: normal; text-align: center; margin-top: 0.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 5%;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                flex-direction: column;
+                background: rgba(10, 14, 20, 0.98);
+                backdrop-filter: blur(20px);
+                padding: 5rem 1.5rem 2rem;
+                gap: 0.4rem;
+                border-left: 1px solid var(--border);
+                transition: right 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.9rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .page-header {
+                padding-top: 6rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sec-title {
+                font-size: 1.4rem;
+            }
+
+            .info-card {
+                padding: 1.3rem;
+            }
+
+            .achievement {
+                padding: 1.2rem;
+            }
+
+            .ach-badge {
+                margin-top: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding-top: 5.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.7rem;
+                letter-spacing: -1px;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- Background canvas -->
+    <div class="bg-canvas">
+        <canvas id="netCanvas"></canvas>
+    </div>
+    <div class="bg-noise"></div>
+
+    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
-        <div class="logo">
-            <h2>Shevon</h2>
-            <p>NETWORK & SOFTWARE</p>
-        </div>
-        <ul id="navLinks">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="projects.html" class="active">Projects</a></li>
-            <li><a href="skills.html">Skills</a></li>
-            <li><a href="contact.html">Contact</a></li>
+        <a href="index.html" class="logo">
+            <div class="logo-mark">S</div>
+            <div class="logo-text">shevon<span class="dot">.</span>weerawardane</div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">home</a></li>
+            <li><a href="about.html">about</a></li>
+            <li><a href="projects.html" class="active">projects</a></li>
+            <li><a href="skills.html">skills</a></li>
+            <li><a href="contact.html">contact</a></li>
         </ul>
-        <div class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="nav-right">
+            <div class="status-pill">
+                <span class="dot"></span>
+                open to work
+            </div>
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <div class="project-detail">
-        <a href="projects.html" class="back-link">← Back to Projects</a>
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <a href="projects.html" class="back-link">← back to projects</a>
+        <div class="prompt">
+            <span class="symbol">$</span>
+            <span class="cmd">cat attsys.md</span>
+            <span class="cursor"></span>
+        </div>
+        <h1>Att<span class="accent">Sys</span></h1>
+        <div class="page-meta">
+            <span class="meta-tag green">qr attendance system</span>
+            <span class="meta-tag cyan">internship @ Expoceylon PLC</span>
+            <span class="meta-tag amber">100% solo · built in 1 month</span>
+            <a href="https://attsys.expoceylonplc.com/" target="_blank" rel="noopener" class="live-link">↗ live system</a>
+        </div>
+    </section>
 
-        <div class="project-header">
-            <h1>📱 AttSys</h1>
-            <span class="project-badge">Internship Project @ Expoceylon PLC</span>
-            <a href="https://attsys.expoceylonplc.com/" target="_blank" class="live-link">🌐 Live System → attsys.expoceylonplc.com</a>
+    <!-- ACHIEVEMENT BANNER -->
+    <section class="section">
+        <div class="achievement reveal">
+            <div class="ach-icon">🏆</div>
+            <div class="ach-text">
+                <h3>Built Within 1 Month of Joining</h3>
+                <p>Developed from scratch — fully created by me as my first major internship project. Complete QR attendance system with real-time validation, reporting, and special power-outage mode.</p>
+            </div>
+            <span class="ach-badge">100% SOLO BUILD</span>
+        </div>
+    </section>
+
+    <!-- OVERVIEW + ROLE + FEATURES -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">overview</div>
+            <h2 class="sec-title">Project <span>Details</span></h2>
         </div>
 
-        <div class="project-content">
-            <!-- ACHIEVEMENT BANNER - KEY ADDITION -->
-            <div class="achievement-banner">
-                <div class="achievement-icon">🏆</div>
-                <div class="achievement-text">
-                    <h4>⚡ Built Within 1 Month of Joining</h4>
-                    <p>Developed from scratch — fully created by me as my first major internship project. Complete QR attendance system with real-time validation, reporting, and special power-outage mode.</p>
-                </div>
-                <div class="achievement-highlight">100% Solo Development</div>
-            </div>
-
-            <!-- Info Grid -->
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>📋 Project Overview</h3>
-                    <p>QR Code-based Attendance Tracking System for branch employees of Expoceylon PLC. Employees scan unique QR codes to mark attendance with real-time validation and automated reporting for HR management.</p>
-                </div>
-                <div class="info-card">
-                    <h3>👨‍💻 My Role (Solo Developer)</h3>
-                    <ul>
-                        <li><strong>Full Stack Developer</strong> - Entire system built by me</li>
-                        <li>QR Code Generator & Scanner Integration</li>
-                        <li>Complete Database Architecture & Design</li>
-                        <li>Real-time Attendance Validation Logic</li>
-                        <li>Report Generation Module (PDF/Excel)</li>
-                        <li>UI/UX Design & Frontend Development</li>
-                        <li>Server Deployment & Configuration</li>
-                    </ul>
-                </div>
-                <div class="info-card">
-                    <h3>⚙️ Key Features</h3>
-                    <ul>
-                        <li>Unique QR code per employee</li>
-                        <li>Real-time attendance marking with timestamp</li>
-                        <li>Device charging requirement validation</li>
-                        <li>Power outage mode for branches</li>
-                        <li>Automated monthly attendance reports</li>
-                        <li>Admin dashboard & employee management</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Special Features from Live System -->
-            <div class="feature-box">
-                <p>🔋 <strong>Live System Features:</strong> Employees must have device plugged into charging to mark attendance (ensures accountability). Power Outage Mode available for branches with active outages — employees can log in without charging requirement during such events.</p>
-            </div>
-
-            <!-- Solo Developer Note -->
-            <div class="solo-dev-note">
-                <p>✨ <strong>Note:</strong> This entire system was conceptualized, designed, developed, tested, and deployed by me within <strong>1 month</strong> of joining Expoceylon PLC as an IT Intern. No external development team involved — 100% self-built solution now actively used by the company.</p>
-            </div>
-
-            <!-- Tech Stack -->
-            <div class="info-card" style="margin-bottom: 0;">
-                <h3>🛠️ Technologies Used</h3>
-                <div class="tech-stack">
-                    <span class="tech-tag">PHP 8.x</span>
-                    <span class="tech-tag">MySQL</span>
-                    <span class="tech-tag">JavaScript (Vanilla)</span>
-                    <span class="tech-tag">QR Code Library (phpqrcode)</span>
-                    <span class="tech-tag">Bootstrap 5</span>
-                    <span class="tech-tag">AJAX</span>
-                    <span class="tech-tag">HTML5/CSS3</span>
-                    <span class="tech-tag">cURL</span>
-                    <span class="tech-tag">Apache/Nginx</span>
-                </div>
-            </div>
-
-            <!-- Image Gallery Section - 8 images -->
-            <div class="gallery-section">
-                <h2>📸 Project Screenshots <span style="font-size: 0.8rem;">(7-8 images)</span></h2>
-                <div class="gallery-grid" id="galleryGrid">
-                    <!-- Images will be dynamically loaded here -->
-                </div>
-                <p style="color: #9cd4c2; font-size: 0.75rem; margin-top: 1rem; text-align: center; font-family: monospace;">
-                    💡 Click on any screenshot to view full size
+        <div class="info-grid">
+            <div class="info-card reveal">
+                <h3>📋 Overview</h3>
+                <p>
+                    QR Code-based Attendance Tracking System for branch employees of <strong>Expoceylon PLC</strong>.
+                    Employees scan unique QR codes to mark attendance with real-time validation and automated
+                    reporting for HR management.
                 </p>
             </div>
+            <div class="info-card reveal">
+                <h3>👨‍💻 My Role (Solo Developer)</h3>
+                <ul>
+                    <li><strong>Full Stack Developer</strong> — entire system built by me</li>
+                    <li>QR code generator & scanner integration</li>
+                    <li>Complete database architecture & design</li>
+                    <li>Real-time attendance validation logic</li>
+                    <li>Report generation module (PDF/Excel)</li>
+                    <li>UI/UX design & frontend development</li>
+                    <li>Server deployment & configuration</li>
+                </ul>
+            </div>
+            <div class="info-card reveal">
+                <h3>⚙️ Key Features</h3>
+                <ul>
+                    <li>Unique QR code per employee</li>
+                    <li>Real-time attendance marking with timestamp</li>
+                    <li>Device charging requirement validation</li>
+                    <li>Power outage mode for branches</li>
+                    <li>Automated monthly attendance reports</li>
+                    <li>Admin dashboard & employee management</li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Modal for fullscreen image -->
+    <!-- LIVE SYSTEM FEATURES -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">live features</div>
+            <h2 class="sec-title">Special <span>Behavior</span></h2>
+        </div>
+
+        <div class="feature-box reveal">
+            <p>🔋 <strong>Charging Requirement:</strong> Employees must have device plugged into charging to mark attendance — ensures accountability and prevents spoofing.</p>
+            <p>⚡ <strong>Power Outage Mode:</strong> Available for branches with active outages — employees can log in without charging requirement during such events, so attendance isn't lost during disruptions.</p>
+        </div>
+
+        <div class="solo-note reveal">
+            <p>✨ <strong>Note:</strong> This entire system was conceptualized, designed, developed, tested, and deployed by me within <strong>1 month</strong> of joining Expoceylon PLC as an IT Intern. No external development team involved — 100% self-built solution now actively used by the company.</p>
+        </div>
+    </section>
+
+    <!-- TECH STACK -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">stack</div>
+            <h2 class="sec-title">Technologies <span>Used</span></h2>
+        </div>
+
+        <div class="reveal">
+            <div class="tech-stack">
+                <span class="tech-tag">PHP 8.x</span>
+                <span class="tech-tag">MySQL</span>
+                <span class="tech-tag">JavaScript (Vanilla)</span>
+                <span class="tech-tag">phpqrcode Library</span>
+                <span class="tech-tag">Bootstrap 5</span>
+                <span class="tech-tag">AJAX</span>
+                <span class="tech-tag">HTML5 / CSS3</span>
+                <span class="tech-tag">cURL</span>
+                <span class="tech-tag">Apache / Nginx</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="section">
+        <div class="sec-head reveal">
+            <div class="sec-label">screenshots · 8 images</div>
+            <h2 class="sec-title">Project <span>Gallery</span></h2>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Images loaded by JS -->
+        </div>
+        <p class="gallery-hint">// click any screenshot to view full size</p>
+    </section>
+
+    <!-- MODAL -->
     <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
+        <button class="modal-close" aria-label="Close">&times;</button>
         <img id="modalImage" src="" alt="Screenshot">
     </div>
 
-    <div class="footer-note">
-        <span>📱 AttSys | QR Attendance System | Built from scratch within 1 month of joining | Live at attsys.expoceylonplc.com</span>
-    </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="hl">AttSys</span>
+            <span class="sep">|</span>
+            <span>QR Attendance System</span>
+            <span class="sep">|</span>
+            <span>Built in 1 month · Live @ attsys.expoceylonplc.com</span>
+        </div>
+    </footer>
 
     <script>
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-        const navbar = document.getElementById('navbar');
+        /* ===== NETWORK CANVAS ===== */
+        const canvas = document.getElementById('netCanvas');
+        const ctx = canvas.getContext('2d');
+        let nodes = [];
+        const mouse = { x: null, y: null, r: 130 };
 
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', () => {
+            resize();
+            buildNodes();
+        });
+
+        window.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Node {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.r = Math.random() * 1.8 + 0.4;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.o = Math.random() * 0.4 + 0.15;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const f = (mouse.r - d) / mouse.r;
+                        this.x += (dx / d) * f * 1.8;
+                        this.y += (dy / d) * f * 1.8;
+                    }
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 229, 160, ${this.o})`;
+                ctx.fill();
+            }
         }
 
-        document.querySelectorAll('.navbar ul li a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (navLinks.classList.contains('active')) navLinks.classList.remove('active');
+        function buildNodes() {
+            nodes = [];
+            const count = Math.min(Math.floor((canvas.width * canvas.height) / 16000), 100);
+            for (let i = 0; i < count; i++) nodes.push(new Node());
+        }
+
+        function drawLines() {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 110) {
+                        const o = (1 - d / 110) * 0.1;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            if (mouse.x !== null) {
+                nodes.forEach(n => {
+                    const dx = n.x - mouse.x;
+                    const dy = n.y - mouse.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < mouse.r) {
+                        const o = (1 - d / mouse.r) * 0.2;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 229, 160, ${o})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(n.x, n.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+        }
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            nodes.forEach(n => { n.update(); n.draw(); });
+            drawLines();
+            requestAnimationFrame(loop);
+        }
+
+        buildNodes();
+        loop();
+
+        /* ===== NAVBAR SCROLL ===== */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        /* ===== MOBILE MENU ===== */
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
             });
         });
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) navbar.classList.add('scrolled');
-            else navbar.classList.remove('scrolled');
-        });
+        /* ===== REVEAL ===== */
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('on');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => io.observe(el));
 
-        // ========== IMAGE GALLERY CONFIGURATION ==========
-        // Save your images with these exact names in the same folder as this HTML file
-        // You can add up to 8 images (attsys1.jpg to attsys8.jpg)
-        
+        /* ===== GALLERY ===== */
         const projectImages = [
-            { filename: 'attsys1.jpg', caption: 'Login Page - Employee Authentication' },
-            { filename: 'attsys2.jpg', caption: 'Login - Charging Required Page (Device must be plugged in)' },
-            { filename: 'attsys3.jpg', caption: 'Employee Dashboard ' },
-            { filename: 'attsys4.jpg', caption: 'Admin Dashboard - Overview & Statistics' },
+            { filename: 'attsys1.jpg', caption: 'Login Page — Employee Authentication' },
+            { filename: 'attsys2.jpg', caption: 'Login — Charging Required Page' },
+            { filename: 'attsys3.jpg', caption: 'Employee Dashboard' },
+            { filename: 'attsys4.jpg', caption: 'Admin Dashboard — Overview & Statistics' },
             { filename: 'attsys5.jpg', caption: 'QR Code Generation for Employees' },
             { filename: 'attsys6.jpg', caption: 'Attendance Reports & Export (PDF/Excel)' },
-            { filename: 'attsys7.jpg', caption: 'Branch Management ' },
-            { filename: 'attsys8.jpg', caption: 'Power Outage Mode ' }
+            { filename: 'attsys7.jpg', caption: 'Branch Management' },
+            { filename: 'attsys8.jpg', caption: 'Power Outage Mode' }
         ];
 
-        // Populate gallery
         const galleryGrid = document.getElementById('galleryGrid');
-        
+
         function loadGallery() {
             projectImages.forEach((img, index) => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
-                
-                const imgElement = document.createElement('img');
-                imgElement.src = img.filename;
-                imgElement.alt = img.caption;
-                imgElement.onerror = function() {
-                    // If image not found, show placeholder with helpful text
-                    this.src = 'https://placehold.co/600x400/0f2a3f/3ab795?text=AttSys+Screenshot+' + (index+1);
+                const item = document.createElement('div');
+                item.className = 'gallery-item reveal';
+                item.style.transitionDelay = (index * 0.05) + 's';
+
+                const imgEl = document.createElement('img');
+                imgEl.src = img.filename;
+                imgEl.alt = img.caption;
+                imgEl.onerror = function() {
+                    this.src = 'https://placehold.co/600x400/0f141c/00e5a0?text=AttSys+' + (index + 1);
                     this.style.objectFit = 'contain';
-                    this.style.background = '#0f2a3f';
                 };
-                
-                const caption = document.createElement('div');
-                caption.className = 'gallery-caption';
-                caption.textContent = img.caption;
-                
-                galleryItem.appendChild(imgElement);
-                galleryItem.appendChild(caption);
-                
-                // Click to open modal
-                galleryItem.addEventListener('click', () => {
-                    openModal(imgElement.src);
-                });
-                
-                galleryGrid.appendChild(galleryItem);
+
+                const cap = document.createElement('div');
+                cap.className = 'gallery-caption';
+                cap.textContent = img.caption || '// screenshot ' + (index + 1);
+
+                item.appendChild(imgEl);
+                item.appendChild(cap);
+
+                item.addEventListener('click', () => openModal(imgEl.src));
+                galleryGrid.appendChild(item);
+
+                const galleryObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(e => {
+                        if (e.isIntersecting) {
+                            e.target.classList.add('on');
+                            galleryObserver.unobserve(e.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                galleryObserver.observe(item);
             });
         }
 
-        // Modal functionality
+        /* ===== MODAL ===== */
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
         const closeBtn = document.querySelector('.modal-close');
@@ -709,49 +1221,17 @@
             modal.classList.add('active');
         }
 
-        closeBtn.onclick = () => {
-            modal.classList.remove('active');
-        };
-
-        modal.onclick = (e) => {
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
             if (e.target === modal) modal.classList.remove('active');
-        };
-
+        });
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.classList.contains('active')) {
                 modal.classList.remove('active');
             }
         });
 
-        // Load gallery on page load
         loadGallery();
-
-        // Console instructions for image naming
-        console.log('📱 AttSys Project Page Loaded');
-        console.log('🌐 Live URL: https://attsys.expoceylonplc.com/');
-        console.log('');
-        console.log('🏆 ACHIEVEMENT: Built this entire system from scratch within 1 month of joining Expoceylon PLC!');
-        console.log('');
-        console.log('📸 IMAGE NAMING INSTRUCTIONS:');
-        console.log('   Save your screenshots with these exact names in the same folder:');
-        console.log('   ┌─────────────────────────────────────────────────────────┐');
-        console.log('   │  attsys1.jpg  - Login Page                             │');
-        console.log('   │  attsys2.jpg  - Login - Charging Required Page         │');
-        console.log('   │  attsys3.jpg  - Employee Dashboard                     │');
-        console.log('   │  attsys4.jpg  - Admin Dashboard                        │');
-        console.log('   │  attsys5.jpg  - QR Code Generation                     │');
-        console.log('   │  attsys6.jpg  - Attendance Reports & Export            │');
-        console.log('   │  attsys7.jpg  - Branch Management                      │');
-        console.log('   │  attsys8.jpg  - Power Outage Mode                      │');
-        console.log('   └─────────────────────────────────────────────────────────┘');
-        console.log('');
-        console.log('   💡 TIPS:');
-        console.log('   - You can use fewer images by removing entries from the projectImages array above');
-        console.log('   - All images go in the same folder as this HTML file');
-        console.log('   - Supported formats: JPG, PNG, GIF');
-        console.log('');
-        console.log('🔋 Special Features: Device charging requirement + Power outage mode (from live system)');
-        console.log('⚡ Timeline: Completed within 1 month of joining date — fully created by me');
     </script>
 </body>
 </html>
